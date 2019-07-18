@@ -2,14 +2,16 @@
 
 # << Project Title >>
 ## CS 110 Final Project
-### << Semester, Year >>
+### Summer 2019
 ### [Assignment Description](https://docs.google.com/document/d/1d6wcXns0hz7HcUr4yF_tJK3QBx3daybmJO3dREPxABA/edit?usp=sharing)
 
 << [https://github.com/<repo>](#) >>
 << [link to demo presentation slides](#) >>
 
-### Team: << team name >>
-#### << Team Names >>
+### Team: JOKe
+#### Kimberny Meeker kmeeker2@binghamton.edu
+#### Jay Kim jkim614@binghamton.edu
+#### Yuqiao Huang yhuan171@binghamton.edu
 
 ***
 
@@ -40,15 +42,15 @@
 ## Tasks and Responsibilities
 * You must outline the team member roles and who was responsible for each class/method, both individual and collaborative.
 
-### Software Lead - << name >>
+### Software Lead - Yuqiao Huang (tentative)
 
 << Worked as integration specialist by... >>
 
-### Front End Specialist - << name >>
+### Front End Specialist - Jay Kim (tentative)
 
 << Front-end lead conducted significant research on... >>
 
-### Back End Specialist - << name >>
+### Back End Specialist - Kimberny Meeker (tentative)
 
 << The back end specialist... >>
 
