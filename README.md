@@ -10,7 +10,7 @@
 
 ### Team: JOKe
 #### Kimberny Meeker kmeeker2@binghamton.edu
-#### Jay Kim jkim614@binghamton.edu
+#### Jae Kim jkim614@binghamton.edu
 #### Yuqiao Huang yhuan171@binghamton.edu
 
 ***
@@ -46,7 +46,7 @@
 
 << Worked as integration specialist by... >>
 
-### Front End Specialist - Jay Kim (tentative)
+### Front End Specialist - Jae Kim (tentative)
 
 << Front-end lead conducted significant research on... >>
 
