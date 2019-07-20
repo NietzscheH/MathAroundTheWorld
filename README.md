@@ -9,7 +9,7 @@
 << [link to demo presentation slides](#) >>
 
 ### Team: JOKe
-#### Kimberny Meeker kmeeker2@binghamton.edu
+#### Kimberly Meeker kmeeker2@binghamton.edu
 #### Jae Kim jkim614@binghamton.edu
 #### Yuqiao Huang yhuan171@binghamton.edu
 
@@ -50,7 +50,7 @@
 
 << Front-end lead conducted significant research on... >>
 
-### Back End Specialist - Kimberny Meeker (tentative)
+### Back End Specialist - Kimberly Meeker (tentative)
 
 << The back end specialist... >>
 
