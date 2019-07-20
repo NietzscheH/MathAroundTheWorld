@@ -1,11 +1,11 @@
 :warning: Everything between << >> needs to be replaced
 
-# << Project Title >>
+# Math Around World
 ## CS 110 Final Project
 ### Summer 2019
 ### [Assignment Description](https://docs.google.com/document/d/1d6wcXns0hz7HcUr4yF_tJK3QBx3daybmJO3dREPxABA/edit?usp=sharing)
 
-<< [https://github.com/<repo>](#) >>
+https://github.com/binghamtonuniversity-cs110/final-project-sum19-joke
 << [link to demo presentation slides](#) >>
 
 ### Team: JOKe
@@ -16,7 +16,7 @@
 ***
 
 ## Project Description
-<< Give an overview of your project >>
+(tentative) This is a math game called 'Math Around World.' In this game, you will see math problems with increasing difficulties. Hurry up! They are dropping down! Do not let the problems touch the ground or else you lose the game. You will also have a chance to interact with cultural elements like British, China, India, etc.
 
 ***    
 
