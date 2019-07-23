@@ -1,3 +1,4 @@
+#import your controller
 import pygame
 
 def main():
