@@ -12,7 +12,7 @@ class Controller:
         self.density = 2000
         self.speed = 0.02
         
-    def createQuestionBox(self, x=150, s=0.02):
+    def createQuestionBox(self, x, s=0.02):
         # create objects here
         x = random.randrange(50, 751)
         self.question_list.append(QB(x, s, self.screen))
