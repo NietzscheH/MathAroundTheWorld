@@ -19,9 +19,9 @@ class Controller:
         self.density = 1000
         self.speed = 0.2
         self.start_button = MenuButton(self.screen)
-        self.start_game = False
         self.ans = pg.sprite.Group()
         self.ans.add(AnswerTypein())
+        self.STATE = 'menu'
         
     def createQuestionBox(self):
         '''
@@ -39,7 +39,7 @@ class Controller:
             if sp.y > self.screen.get_rect().size[1] - sp.h - 70:
                 self.questions.remove(sp)
 
-    def menu(self):
+    def drawMenu(self):
         '''
             show the start button on the screen
         '''
@@ -74,37 +74,34 @@ class Controller:
         self.deleteOutscreenBox()
         return d
 
-    def typeAns(self):
-        '''
-            take users' keyboard input and show it onscreen
-        '''
+    def menuLoop(self):
+        self.mouse_x, self.mouse_y = pg.mouse.get_pos()
+        self.drawMenu()
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit() #sys.exit()
+            elif event.type == pg.MOUSEBUTTONDOWN:
+                if self.start_button.rect.collidepoint(self.mouse_x, self.mouse_y):
+                    self.STATE = 'game'
+    
+    def gameLoop(self, d):
+        d = self.startGame(d)
         self.ans.draw(self.screen)
         for event in pg.event.get():
             if event.type == pg.QUIT:
-                    pg.quit()
+                pg.quit()
             elif event.type == pg.KEYDOWN:
                 key_num = event.key
                 self.ans.update(key_num)
+        return d
 
     def mainloop(self):
-        # loop it, or say, run it
         d = 1000
-        while True:
-            self.mouse_x, self.mouse_y = pg.mouse.get_pos()
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    pg.quit() #sys.exit()
-                elif event.type == pg.MOUSEBUTTONDOWN:
-                    if self.start_button.rect.collidepoint(self.mouse_x, self.mouse_y):
-                        self.start_game = True
-            
-            if self.start_game:
-                d = self.startGame(d)
-                self.typeAns()
-            else:
-                self.menu()
-
-
+        # loop it, or say, run it
+        while self.STATE == 'menu':
+            self.menuLoop()
             pg.display.update()
-
+        while self.STATE == 'game':
+            d = self.gameLoop(d)
+            pg.display.update()
 
