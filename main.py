@@ -1,7 +1,8 @@
-#import your controller
+from Controller import Controller
 import pygame
 
 def main():
-    pygame.init()
+    test = Controller()
+    test.mainloop()
     #Create an instance on your controller object
 main()
