@@ -28,7 +28,7 @@ class Controller:
         '''
             this method creates a questions box object and put it in a sprite group.
         '''
-        x = random.randrange(50, 751)
+        x = random.randrange(50, 1150)
         self.questions.add(QB(x, self.speed))
         self.count += 1
 

@@ -6,6 +6,7 @@ class AnswerTypein(pg.sprite.Sprite):
         self.text_color = text_color
         self.bg_color = bg_color
         self.keys = {
+            45: '-',
             46: '.',
             48: '0',
             49: '1',
@@ -28,6 +29,8 @@ class AnswerTypein(pg.sprite.Sprite):
     def update(self, k):
         if k == 8 and len(self.result) != 0:
             self.result = self.result[:-1]
+        elif k == 45 and len(self.result) != 0:
+            pass
         else:
             self.result += self.keys.get(k, '')
         self.image = pg.font.SysFont('arial', 45).render(self.result, True, self.text_color)
