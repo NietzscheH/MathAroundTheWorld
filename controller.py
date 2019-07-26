@@ -16,6 +16,7 @@ class Controller:
         self.questions = pg.sprite.Group()
         self.count = 0
         self.lives = 3
+        self.score = 0
         self.density = 1000
         self.speed = 0.2
         self.start_button = MenuButton(self.screen)
