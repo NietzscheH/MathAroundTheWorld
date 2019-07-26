@@ -3,7 +3,6 @@ import pygame
 
 def main():
     test = Controller()
-    test.initialize()
-    test.runGame()
+    test.mainloop()
     #Create an instance on your controller object
 main()
