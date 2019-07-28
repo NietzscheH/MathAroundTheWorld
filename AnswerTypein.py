@@ -20,17 +20,30 @@ class AnswerTypein(pg.sprite.Sprite):
             57: '9',
         }
         self.result = ''
+        self.res = None
         self.image = pg.font.SysFont('arial', 45).render(self.result, True, self.text_color)
         self.rect = pg.Rect(10, 745, 1180, 45)
+
+        self.bg_image = pg.Surface((1180, 45))
+        self.bg_image.fill((100,100,100))
+        self.bg_rect = self.bg_image.get_rect()
+        self.bg_rect.topleft = (10, 745)
 
     def __str__(self):
         return self.result
 
     def update(self, k):
-        if k == 8 and len(self.result) != 0:
+        self.res = None
+        if k == 8 and len(self.result) != 0: # backspace key
             self.result = self.result[:-1]
-        elif k == 45 and len(self.result) != 0:
+        elif k == 45 and len(self.result) != 0: # minus key; prevent users type in minus if there is number typed in already
             pass
+        elif k == 13: # return key (or enter key)
+            self.res = self.result
+            self.result = ''
         else:
-            self.result += self.keys.get(k, '')
+            self.result += self.keys.get(k, '') # if the key is not a number, add nothing
         self.image = pg.font.SysFont('arial', 45).render(self.result, True, self.text_color)
+
+    def submit(self):
+        return self.res
