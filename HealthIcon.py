@@ -1,31 +1,29 @@
-import pygame
+import pygame as pg
+import os
 
-class HealthIcon:
-    '''
-    The instances of this class respresent the number of chances the user has
-        to get a correct answer before the game ends
-    '''
-    def __init__(self, x_coor, y_coor):
-        '''
-        Initializes a healthicon object
-        args:
-              x_coor ('int') the x-coordinate of the upper left corner
-              y_coor ('int') the y-coordinate of the upper left corner
-        return: ('HealthIcon') object of class Scoreboard
-        '''
-        # Initializes Sprite functionality
-        pygame.sprite.Sprite.__init__(self)
-        self.image = image
-        # Gets the rectangle for positioning
+class HealthIcon(pg.sprite.Sprite):
+    def __init__(self):
+        pg.sprite.Sprite.__init__(self)
+        self.health = 3
+
+        # get and rescale the image
+        base_path = os.path.dirname(__file__)
+        file_path = os.path.join(base_path, 'assets', 'heart_1.png')
+        self.heart = pg.image.load(file_path)
+        self.heart = pg.transform.scale(self.heart, (32, 32))
+
+        # blit the image onto a surface
+        self.image = pg.Surface((96, 32))
+        self.image.fill((255,255,255))
+        for i in range(self.health):
+            self.image.blit(self.heart, (i*32,0))
+
         self.rect = self.image.get_rect()
-        self.rect.x = x_coor
-        self.rect.y = y_coor
+        self.rect.topleft = (0, 10)
 
-    def __str__(self):
-        '''
-        Stringification of healthicon object
-        args: none
-        return: coordinates for the upper left corner
-        '''
-        return 'Health Icon: (', + str(x_coor) + ', ' + str(y_coor) + ')'
-
+    def update(self):
+        self.health -= 1
+        self.image = pg.Surface((96, 32))
+        self.image.fill((255,255,255))
+        for i in range(self.health):
+            self.image.blit(self.heart, (i*32,0))

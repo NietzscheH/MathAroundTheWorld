@@ -3,9 +3,10 @@ from QuestionBox import QuestionBox as QB
 from QuestionGenerator import QuestionGenerator as QG
 from MenuButton import MenuButton
 from AnswerTypein import AnswerTypein
-from ScoreBoard_ import ScoreBoard as SB
-from HealthIcon_ import HealthIcon as HI
+from ScoreBoard import ScoreBoard as SB
+from HealthIcon import HealthIcon as HI
 import random
+from os import path
 
 
 class Controller:
@@ -13,17 +14,18 @@ class Controller:
         # initialize a screen
         pg.init()
         self.screen = pg.display.set_mode((1024, 768))
-        pg.display.set_caption('Draft v1.3')
+        pg.display.set_caption('Draft v1.4')
         self.mouse_x, self.mouse_y = None, None
 
         self.questions = pg.sprite.Group()
         self.count = 0 # currently has no use
         self.lives = 3
         self.score = 0
-        self.density = 1500 # it means problems will be generated every 1000 frames
-        self.speed = 0.08 # the speed of question boxes
+        self.density = 2500 # it means problems will be generated every 1000 frames
+        self.speed = 0.1 # the speed of question boxes
 
         self.start_button = MenuButton('Start', self.screen.get_rect().center)
+        self.again_button = MenuButton('Start Again', (512, 410), 60, (112,128,144))
         self.ans_typein = AnswerTypein()
         self.ans = pg.sprite.Group()
         self.ans.add(self.ans_typein)
@@ -35,6 +37,16 @@ class Controller:
         self.user_health = pg.sprite.Group()
         self.user_health.add(self.health_bar)
         self.STATE = 'menu'
+
+        base_path = path.dirname(__file__)
+        self.sound_effect = {
+            'wrong': pg.mixer.Sound(path.join(base_path, 'assets', 'buzzer.wav')),
+            'right': pg.mixer.Sound(path.join(base_path, 'assets', 'chime.wav')),
+            'hit': pg.mixer.Sound(path.join(base_path, 'assets', 'clunk.wav'))
+        }
+        for i in self.sound_effect.keys():
+            self.sound_effect[i].set_volume(0.15)
+        
         
     def createQuestionBox(self):
         '''
@@ -54,10 +66,13 @@ class Controller:
             this method deletes box objects that are out of the screen/ touching the bottom
         '''
         for sp in self.questions:
-            if sp.y > self.screen.get_rect().size[1] - sp.h - 65:
+            if sp.ycor > self.screen.get_rect().size[1] - sp.height - 65:
+                self.sound_effect['hit'].play()
                 self.questions.remove(sp)
                 self.user_health.update()
                 self.lives -= 1
+                if self.lives < 0:
+                    self.STATE = 'end'
             break # it only needs to run once per frame
 
     def drawMenu(self):
@@ -71,6 +86,22 @@ class Controller:
             self.start_button.notOver()
         self.screen.blit(self.start_button.image, self.start_button.rect)
     
+    def drawEnd(self):
+        '''
+            show the result page
+        '''
+        self.screen.fill((190,231,233))
+
+        # display user's final score
+        score_record = SB(self.score, (512,330), 60, (244,96,108))
+        self.screen.blit(score_record.image, score_record.rect)
+
+        if self.isOver(self.again_button.rect):
+            self.again_button.isOver()
+        else:
+            self.again_button.notOver()
+        self.screen.blit(self.again_button.image, self.again_button.rect)
+
     def isOver(self, rect):
         '''
             this method checks if mouse is over the rect
@@ -91,7 +122,7 @@ class Controller:
         d += 1
         
         for sp in self.questions:
-            sp.bg_color = (0,255,255) # change the background color of the bottom most one
+            sp.bg_color = (160,238,225) # change the background color of the bottom most one
             break
         self.questions.update()
         self.questions.draw(self.screen)
@@ -104,9 +135,12 @@ class Controller:
         '''
         for sp in self.questions:
             if sp.answer == ans_submitted:
+                self.sound_effect['right'].play()
                 self.user_score.update() # in update(), the score will + 1
                 self.score += 1 # I create another instance variable (score) here because it's more convenient
                 self.questions.remove(sp)
+            else:
+                self.sound_effect['wrong'].play()
             break
         #print(self.score_board.score, self.lives)
 
@@ -138,13 +172,35 @@ class Controller:
                 else: self.checkAns(ans_submitted) # ans_submiited will not be None if users hit ENTER key with numbers typed in
         return d
 
-    def mainloop(self):
-        d = 1000
-        # loop it, or say, run it
-        while self.STATE == 'menu':
-            self.menuLoop()
-            pg.display.update()
-        while self.STATE == 'game':
-            d = self.gameLoop(d)
-            pg.display.update()
+    def endLoop(self):
+        self.mouse_x, self.mouse_y = pg.mouse.get_pos()
+        self.drawEnd()
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit() #sys.exit()
+            elif event.type == pg.MOUSEBUTTONDOWN:
+                if self.again_button.rect.collidepoint(self.mouse_x, self.mouse_y):
+                    self.STATE = 'game'
 
+    def mainloop(self):
+        # loop it, or say, run it
+        while True: # without this loop, the game will exit automatically after clicking 'start again', because there is no codes after while STATE == 'end' loop
+            d = 1000
+            while self.STATE == 'menu':
+                self.menuLoop()
+                pg.display.update()
+            while self.STATE == 'game':
+                d = self.gameLoop(d)
+                pg.display.update()
+            while self.STATE == 'end':
+                self.endLoop()
+                pg.display.update()
+
+            # reset everything
+            self.questions.empty()
+            self.ans_typein.result = ''
+            self.ans_typein.update(0) # empty the type in box
+            self.score, self.score_board.score = 0, -1
+            self.user_score.update() # have to update to change the image
+            self.lives, self.health_bar.health = 3, 4
+            self.user_health.update() # same
