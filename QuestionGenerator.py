@@ -8,7 +8,6 @@ class QuestionGenerator:
             3: '*',
             4: '/'
         }
-        pass
 
     def level_1(self):
         exp = '{num1}{operation}{num2}'.format(num1=randint(0, 9), operation=self.dict[randint(1, 4)], num2=randint(0, 9))

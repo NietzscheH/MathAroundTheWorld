@@ -14,7 +14,7 @@ class Controller:
         # initialize a screen
         pg.init()
         self.screen = pg.display.set_mode((1024, 768))
-        pg.display.set_caption('Draft v1.4')
+        pg.display.set_caption('Draft v1.4.1')
         self.mouse_x, self.mouse_y = None, None
 
         self.questions = pg.sprite.Group()
