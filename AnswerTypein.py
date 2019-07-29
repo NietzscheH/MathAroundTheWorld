@@ -1,7 +1,7 @@
 import pygame as pg
 
 class AnswerTypein(pg.sprite.Sprite):
-    def __init__(self, text_color=(33,206,153), bg_color=(255,255,255)):
+    def __init__(self, text_color=(33,206,153), bg_color=(100,100,100)):
         pg.sprite.Sprite.__init__(self)
         self.text_color = text_color
         self.bg_color = bg_color
@@ -22,12 +22,12 @@ class AnswerTypein(pg.sprite.Sprite):
         self.result = ''
         self.res = None
         self.image = pg.font.SysFont('arial', 45).render(self.result, True, self.text_color)
-        self.rect = pg.Rect(10, 745, 1180, 45)
+        self.rect = pg.Rect(10, 713, 1004, 45)
 
-        self.bg_image = pg.Surface((1180, 45))
-        self.bg_image.fill((100,100,100))
+        self.bg_image = pg.Surface((1004, 45))
+        self.bg_image.fill(self.bg_color)
         self.bg_rect = self.bg_image.get_rect()
-        self.bg_rect.topleft = (10, 745)
+        self.bg_rect.topleft = (10, 713)
 
     def __str__(self):
         return self.result
