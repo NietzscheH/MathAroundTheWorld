@@ -13,31 +13,36 @@ class Controller:
     def __init__(self):
         # initialize a screen
         pg.init()
+        pg.mixer.init()
         self.screen = pg.display.set_mode((1024, 768))
-        pg.display.set_caption('Draft v1.4.1')
+        pg.display.set_caption('v2.0')
         self.mouse_x, self.mouse_y = None, None
 
+        # some users' identities are created here
         self.questions = pg.sprite.Group()
         self.count = 0 # currently has no use
         self.lives = 3
         self.score = 0
-        self.density = 2500 # it means problems will be generated every 1000 frames
-        self.speed = 0.1 # the speed of question boxes
+        self.density = 480 # it means problems will be generated every 480 frames
+        self.speed = 3 # the speed of question boxes
 
+        # some buttons are created here
         self.start_button = MenuButton('Start', self.screen.get_rect().center)
+        self.China_button = MenuButton('China', (512, 304), 60, (197,31,31))
+        self.Egypt_button = MenuButton('Eygpt', (512, 384), 60, (222,211,140))
+        self.Italy_button = MenuButton('Italy', (512, 464), 60, (179,214,110))
         self.again_button = MenuButton('Start Again', (512, 410), 60, (112,128,144))
-        self.ans_typein = AnswerTypein()
-        self.ans = pg.sprite.Group()
+        self.ans_typein = AnswerTypein() # the type in box object
+        self.ans = pg.sprite.Group() # the sprite group for the type in box object
         self.ans.add(self.ans_typein)
 
+        # scoreboard and health bar objects
         self.score_board = SB()
         self.health_bar = HI()
-        self.user_score = pg.sprite.Group()
-        self.user_score.add(self.score_board)
-        self.user_health = pg.sprite.Group()
-        self.user_health.add(self.health_bar)
-        self.STATE = 'menu'
+        
+        self.STATE = 'start'
 
+        # general sound effects
         base_path = path.dirname(__file__)
         self.sound_effect = {
             'wrong': pg.mixer.Sound(path.join(base_path, 'assets', 'buzzer.wav')),
@@ -47,12 +52,27 @@ class Controller:
         for i in self.sound_effect.keys():
             self.sound_effect[i].set_volume(0.15)
         
+        # background image
+        self.bg_by_country = {
+            'China': (255,255,255),
+            'Egypt': (222,211,140),
+            'Italy': (179,214,110)
+        }
+
+        # background music
+        self.volume = 0
+        self.bgm_player = pg.mixer.music
+        self.bgm_by_country = {
+            'China': [path.join(base_path, 'assets', 'China_BGM_1.mp3')],
+            'Egypt': [None],
+            'Italy': [None]
+        }
         
     def createQuestionBox(self):
         '''
             this method creates a questions box object and put it in a sprite group.
         '''
-        x = random.randrange(50, 974) # leave 50pixels on both sides
+        x = random.randrange(100, 924) # leave 100pixels on both sides
         problem_obj = QG()
 
         if self.score <= 10:
@@ -69,13 +89,13 @@ class Controller:
             if sp.ycor > self.screen.get_rect().size[1] - sp.height - 65:
                 self.sound_effect['hit'].play()
                 self.questions.remove(sp)
-                self.user_health.update()
+                self.health_bar.update()
                 self.lives -= 1
                 if self.lives < 0:
                     self.STATE = 'end'
             break # it only needs to run once per frame
 
-    def drawMenu(self):
+    def drawStart(self):
         '''
             show the start button on the screen
         '''
@@ -86,6 +106,21 @@ class Controller:
             self.start_button.notOver()
         self.screen.blit(self.start_button.image, self.start_button.rect)
     
+    def drawMenu(self):
+        '''
+            show the menu on the screen
+        '''
+        self.screen.fill((175,215,237))
+        if self.isOver(self.China_button.rect): self.China_button.isOver()
+        else: self.China_button.notOver()
+        if self.isOver(self.Egypt_button.rect): self.Egypt_button.isOver()
+        else: self.Egypt_button.notOver()
+        if self.isOver(self.Italy_button.rect): self.Italy_button.isOver()
+        else: self.Italy_button.notOver()
+        
+        # blits them; the para the blits() takes is a sequence, e.g. here we are using 3 tuples inside 1 tuple and that 1 tuple is parsed into blits()
+        self.screen.blits(((self.China_button.image, self.China_button.rect), (self.Egypt_button.image, self.Egypt_button.rect), (self.Italy_button.image, self.Italy_button.rect)))
+
     def drawEnd(self):
         '''
             show the result page
@@ -93,7 +128,7 @@ class Controller:
         self.screen.fill((190,231,233))
 
         # display user's final score
-        score_record = SB(self.score, (512,330), 60, (244,96,108))
+        score_record = SB(self.score, (512,330), 60, (244,96,108)) # this is just another scoreboard object with different position, size, and color
         self.screen.blit(score_record.image, score_record.rect)
 
         if self.isOver(self.again_button.rect):
@@ -111,18 +146,18 @@ class Controller:
         else:
             return False
 
-    def startGame(self, d):
+    def drawGame(self, d, country):
         '''
             start dropping boxes down
         '''
-        self.screen.fill((255,255,255))
+        self.screen.fill(self.bg_by_country[country])
         if d == self.density: # the bigger the density is, the slower the game goes
             self.createQuestionBox()
             d = 0
         d += 1
         
         for sp in self.questions:
-            sp.bg_color = (160,238,225) # change the background color of the bottom most one
+            sp.filename = 'moon_2.png'
             break
         self.questions.update()
         self.questions.draw(self.screen)
@@ -136,7 +171,7 @@ class Controller:
         for sp in self.questions:
             if sp.answer == ans_submitted:
                 self.sound_effect['right'].play()
-                self.user_score.update() # in update(), the score will + 1
+                self.score_board.update() # in update(), the score will + 1
                 self.score += 1 # I create another instance variable (score) here because it's more convenient
                 self.questions.remove(sp)
             else:
@@ -145,28 +180,46 @@ class Controller:
         #print(self.score_board.score, self.lives)
 
 
-    def menuLoop(self):
+    def startLoop(self):
         self.mouse_x, self.mouse_y = pg.mouse.get_pos()
-        self.drawMenu()
+        self.drawStart()
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit() #sys.exit()
             elif event.type == pg.MOUSEBUTTONDOWN:
                 if self.start_button.rect.collidepoint(self.mouse_x, self.mouse_y):
-                    self.STATE = 'game'
+                    self.STATE = 'menu'
     
-    def gameLoop(self, d):
-        d = self.startGame(d)
+    def menuLoop(self):
+        self.mouse_x, self.mouse_y = pg.mouse.get_pos()
+        self.drawMenu()
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+            elif event.type == pg.MOUSEBUTTONDOWN:
+                if self.China_button.rect.collidepoint(self.mouse_x, self.mouse_y):
+                    # start play music here
+                    self.STATE = 'game China'
+                elif self.Italy_button.rect.collidepoint(self.mouse_x, self.mouse_y):
+                    self.STATE = 'game Italy'
+                elif self.Egypt_button.rect.collidepoint(self.mouse_x, self.mouse_y):
+                    self.STATE = 'game Egypt'
+
+    def gameLoop(self, d, country):
+        # adjust volume to create a fade in here
+        d = self.drawGame(d, country)
         self.screen.blit(self.ans_typein.bg_image, self.ans_typein.bg_rect) # draw the background before drawing the text that users put in
         self.ans.draw(self.screen) # draw the text that users type in
-        self.user_score.draw(self.screen) # draw the scoreboard
-        self.user_health.draw(self.screen) # draw the health icon
+
+        self.screen.blits(((self.score_board.image, self.score_board.rect), (self.health_bar.byCountry(country), self.health_bar.rect)))
+
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
             elif event.type == pg.KEYDOWN:
                 key_num = event.key # event.key is a number corresponds to the key
                 self.ans.update(key_num)
+                
                 ans_submitted = self.ans_typein.submit()
                 if ans_submitted is None: pass
                 else: self.checkAns(ans_submitted) # ans_submiited will not be None if users hit ENTER key with numbers typed in
@@ -180,20 +233,28 @@ class Controller:
                 pg.quit() #sys.exit()
             elif event.type == pg.MOUSEBUTTONDOWN:
                 if self.again_button.rect.collidepoint(self.mouse_x, self.mouse_y):
-                    self.STATE = 'game'
+                    self.STATE = 'start'
 
     def mainloop(self):
         # loop it, or say, run it
         while True: # without this loop, the game will exit automatically after clicking 'start again', because there is no codes after while STATE == 'end' loop
-            d = 1000
+            d = 360
+            self.volume = 0
+            while self.STATE == 'start':
+                self.startLoop()
+                pg.time.Clock().tick(60) # set the frame rate to be 60 per second at most
+                pg.display.update()
             while self.STATE == 'menu':
                 self.menuLoop()
+                pg.time.Clock().tick(60)
                 pg.display.update()
-            while self.STATE == 'game':
-                d = self.gameLoop(d)
+            while self.STATE[:4] == 'game': # note the difference here
+                d = self.gameLoop(d, self.STATE[5:])
+                pg.time.Clock().tick(60)
                 pg.display.update()
             while self.STATE == 'end':
                 self.endLoop()
+                pg.time.Clock().tick(60)
                 pg.display.update()
 
             # reset everything
@@ -201,6 +262,6 @@ class Controller:
             self.ans_typein.result = ''
             self.ans_typein.update(0) # empty the type in box
             self.score, self.score_board.score = 0, -1
-            self.user_score.update() # have to update to change the image
+            self.score_board.update() # have to update to change the image
             self.lives, self.health_bar.health = 3, 4
-            self.user_health.update() # same
+            self.health_bar.update() # same

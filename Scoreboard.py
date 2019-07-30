@@ -1,8 +1,7 @@
 import pygame as pg
 
-class ScoreBoard(pg.sprite.Sprite):
+class ScoreBoard:
     def __init__(self, score=0, pos=(22,57), size=24, color=(0,0,0)):
-        pg.sprite.Sprite.__init__(self)
         self.score = score
         self.size = size
         self.color = color
