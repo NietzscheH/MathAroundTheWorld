@@ -28,7 +28,7 @@ class Controller:
         self.speed = 3 # the speed of question boxes
 
         # some buttons are created here
-        self.start_button = MB((512,404), 'startbasic.png', 'startmouseon.png')
+        self.start_button = MB((512,404), 'startbasic.png', 'starthover.png')
         self.rules_button = MB((512,489), 'rulesbasic.png', 'ruleshover.png')
         self.credit_button = MB((512,574), 'creditbasic.png', 'credithover.png')
 
@@ -43,7 +43,7 @@ class Controller:
         # scoreboard and health bar objects
         self.score_board = SB()
         self.health_bar = HI()
-        
+
         self.STATE = 'start'
 
         # general sound effects
@@ -55,7 +55,7 @@ class Controller:
         }
         for i in self.sound_effect.keys():
             self.sound_effect[i].set_volume(0.15)
-        
+
         # background image
         self.bg_by_country = {
             'China': (255,255,255),
@@ -71,7 +71,7 @@ class Controller:
             'Egypt': [None],
             'Italy': [None]
         }
-        
+
     def createQuestionBox(self):
         '''
             this method creates a questions box object and put it in a sprite group.
@@ -110,7 +110,7 @@ class Controller:
             else:
                 button.notOver()
         self.screen.blits(((self.start_button.image, self.start_button.rect), (self.rules_button.image, self.rules_button.rect), (self.credit_button.image, self.credit_button.rect)))
-    
+
     def drawMenu(self):
         '''
             show the menu on the screen
@@ -119,7 +119,7 @@ class Controller:
         for button in [self.China_button, self.Egypt_button, self.Italy_button]:
             if self.isOver(button.rect): button.isOver()
             else: button.notOver()
-        
+
         # blits them; the para the blits() takes is a sequence, e.g. here we are using 3 tuples inside 1 tuple and that 1 tuple is parsed into blits()
         self.screen.blits(((self.China_button.image, self.China_button.rect), (self.Egypt_button.image, self.Egypt_button.rect), (self.Italy_button.image, self.Italy_button.rect)))
 
@@ -157,7 +157,7 @@ class Controller:
             self.createQuestionBox()
             d = 0
         d += 1
-        
+
         for sp in self.questions:
             sp.filename = 'moon_2.png'
             break
@@ -197,7 +197,7 @@ class Controller:
                     self.STATE = 'rules'
                 elif self.credit_button.rect.collidepoint(self.mouse_x, self.mouse_y):
                     self.STATE = 'credt'
-    
+
     def menuLoop(self):
         self.mouse_x, self.mouse_y = pg.mouse.get_pos()
         self.drawMenu()
@@ -221,7 +221,7 @@ class Controller:
                 pg.quit() #sys.exit()
             elif event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
                 self.STATE = 'start'
-    
+
     def creditLoop(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -245,7 +245,7 @@ class Controller:
             elif event.type == pg.KEYDOWN:
                 key_num = event.key # event.key is a number corresponds to the key
                 self.ans.update(key_num)
-                
+
                 ans_submitted = self.ans_typein.submit()
                 if ans_submitted is None: pass
                 else: self.checkAns(ans_submitted) # ans_submiited will not be None if users hit ENTER key with numbers typed in
