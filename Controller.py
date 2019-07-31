@@ -49,9 +49,9 @@ class Controller:
         # general sound effects
         base_path = path.dirname(__file__)
         self.sound_effect = {
-            'wrong': pg.mixer.Sound(path.join(base_path, 'assets', 'buzzer.wav')),
-            'right': pg.mixer.Sound(path.join(base_path, 'assets', 'chime.wav')),
-            'hit': pg.mixer.Sound(path.join(base_path, 'assets', 'clunk.wav'))
+            'wrong': pg.mixer.Sound(path.join(base_path, 'assets', 'sound', 'sound_effects', 'buzzer.wav')),
+            'right': pg.mixer.Sound(path.join(base_path, 'assets', 'sound', 'sound_effects', 'chime.wav')),
+            'hit': pg.mixer.Sound(path.join(base_path, 'assets', 'sound', 'sound_effects', 'clunk.wav'))
         }
         for i in self.sound_effect.keys():
             self.sound_effect[i].set_volume(0.15)
