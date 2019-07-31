@@ -30,9 +30,19 @@ class AnswerTypein(pg.sprite.Sprite):
         self.bg_rect.topleft = (10, 713)
 
     def __str__(self):
+        '''
+            Stringification of AnswerTypein object
+            args: none
+            return: ('str') the input typed by the user
+        '''
         return self.result
 
     def update(self, k):
+        '''
+            Updates the Typein field with user input
+            args: Pygame keyboard constant
+            return: none
+        '''
         self.res = None
         if k == pg.K_BACKSPACE and len(self.result) != 0: # backspace key
             self.result = self.result[:-1]
@@ -46,4 +56,9 @@ class AnswerTypein(pg.sprite.Sprite):
         self.image = pg.font.SysFont('arial', 45).render(self.result, True, self.text_color)
 
     def submit(self):
+        '''
+            Returns the user's answer after the enter key has been pressed
+            args: none
+            return: ('str') the answer entered by the user
+        '''
         return self.res
