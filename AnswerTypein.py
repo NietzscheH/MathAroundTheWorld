@@ -37,22 +37,22 @@ class AnswerTypein(pg.sprite.Sprite):
         '''
         return self.result
 
-    def update(self, k):
+    def update(self, key):
         '''
             Updates the Typein field with user input
             args: Pygame keyboard constant
             return: none
         '''
         self.res = None
-        if k == pg.K_BACKSPACE and len(self.result) != 0: # backspace key
+        if key == pg.K_BACKSPACE and len(self.result) != 0: # backspace key
             self.result = self.result[:-1]
-        elif k == pg.K_MINUS and len(self.result) != 0: # minus key; prevent users type in minus if there is number typed in already
+        elif key == pg.K_MINUS and len(self.result) != 0: # minus key; prevent users type in minus if there is number typed in already
             pass
-        elif k == pg.K_RETURN: # return key (or enter key)
+        elif key == pg.K_RETURN: # return key (or enter key)
             self.res = self.result
             self.result = ''
         else:
-            self.result += self.keys.get(k, '') # if the key is not a number, add nothing
+            self.result += self.keys.get(key, '') # if the key is not a number, add nothing
         self.image = pg.font.SysFont('arial', 45).render(self.result, True, self.text_color)
 
     def submit(self):

@@ -148,15 +148,15 @@ class Controller:
         else:
             return False
 
-    def drawGame(self, d, country):
+    def drawGame(self, density, country):
         '''
             start dropping boxes down
         '''
         self.screen.fill(self.bg_by_country[country])
-        if d == self.density: # the bigger the density is, the slower the game goes
+        if density == self.density: # the bigger the density is, the slower the game goes
             self.createQuestionBox()
-            d = 0
-        d += 1
+            density = 0
+        density += 1
 
         for sp in self.questions:
             sp.filename = 'moon_2.png'
@@ -164,7 +164,7 @@ class Controller:
         self.questions.update()
         self.questions.draw(self.screen)
         self.deleteOutscreenBox()
-        return d
+        return density
 
     def checkAns(self, ans_submitted):
         '''
@@ -229,9 +229,9 @@ class Controller:
             elif event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
                 self.STATE = 'start'
 
-    def gameLoop(self, d, country):
+    def gameLoop(self, density, country):
         # adjust volume to create a fade in here
-        d = self.drawGame(d, country)
+        density = self.drawGame(density, country)
         self.screen.blit(self.ans_typein.bg_image, self.ans_typein.bg_rect) # draw the background before drawing the text that users put in
         self.ans.draw(self.screen) # draw the text that users type in
 
@@ -249,7 +249,7 @@ class Controller:
                 ans_submitted = self.ans_typein.submit()
                 if ans_submitted is None: pass
                 else: self.checkAns(ans_submitted) # ans_submiited will not be None if users hit ENTER key with numbers typed in
-        return d
+        return density
 
     def endLoop(self):
         self.mouse_x, self.mouse_y = pg.mouse.get_pos()
@@ -264,7 +264,7 @@ class Controller:
     def mainloop(self):
         # loop it, or say, run it
         while True: # without this loop, the game will exit automatically after clicking 'start again', because there is no codes after while STATE == 'end' loop
-            d = 360
+            density = 360
             self.volume = 0
             while self.STATE == 'start':
                 self.startLoop()
@@ -283,7 +283,7 @@ class Controller:
                 pg.time.Clock().tick(60)
                 pg.display.update()
             while self.STATE[:4] == 'game': # note the difference here
-                d = self.gameLoop(d, self.STATE[5:])
+                density = self.gameLoop(density, self.STATE[5:])
                 pg.time.Clock().tick(60)
                 pg.display.update()
             while self.STATE == 'end':
