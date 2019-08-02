@@ -32,9 +32,19 @@ class QuestionBox(pg.sprite.Sprite):
         self.rect.x = self.xcor
 
     def __str__(self):
+        '''
+            Stringification of QuestionBox object
+            args: none
+            return: ('str') the text displayed on the QuestionBox object
+        '''
         return self.txt
 
     def update(self):
+        '''
+            Updates location and appearance of QuestionBox object
+            args: none
+            return: none
+        '''
         # change the filename and thus change everything to change the background image of the bottom most question
         self.file_path = os.path.join(self.base_path, 'assets', self.filename)
         self.image = pg.image.load(self.file_path)

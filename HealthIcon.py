@@ -23,6 +23,11 @@ class HealthIcon:
         # so, after initialization (i.e., after the object is created), the image is actually a blank image with nothing
         
     def update(self):
+        '''
+            Updates the health status
+            args: none
+            return: none
+        '''
         self.health -= 1
         self.image = pg.Surface((96, 32), pg.SRCALPHA, 32).convert_alpha() # this step resets the image, or it will only draw upon the original image
     

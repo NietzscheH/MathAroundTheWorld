@@ -13,14 +13,30 @@ class MenuButton_:
         self.rect.center = self.pos
 
     def __str__(self):
+        '''
+            Stringification of MenuButton object
+            args: none
+            return: ('str') a string representation of the central point of
+                    the MenuButton object
+        '''
         return str(self.rect.center)
 
     def isOver(self):
+        '''
+            Changes appearance when the pointer is hovering over MenuButton
+            args: none
+            return: none
+        '''
         self.image = pg.image.load(self.hover_pic_path)
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
 
     def notOver(self):
+        '''
+            Sets appearance when the pointer is not hovering over MenuButton
+            args: none
+            return: none
+        '''
         self.image = pg.image.load(self.default_pic_path)
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
