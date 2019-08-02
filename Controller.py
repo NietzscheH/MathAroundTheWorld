@@ -58,9 +58,9 @@ class Controller:
 
         # background image
         self.bg_by_country = {
-            'China': (255,255,255),
-            'Egypt': (222,211,140),
-            'Italy': (179,214,110)
+            'China': 'background_china.png', (255,255,255)
+            'Egypt': 'background_egypt.png', (222,211,140)
+            'Italy': 'background_italy.png' (179,214,110)
         }
 
         # background music
