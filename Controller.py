@@ -184,7 +184,7 @@ class Controller:
             density += 1
 
             for sp in self.questions:
-                sp.filename = self.icons_by_country[country][1]
+                sp.filename = self.icons_by_country[country][1] # change the background image of the bottom most question
                 break
             self.questions.update()
             self.questions.draw(self.screen)
