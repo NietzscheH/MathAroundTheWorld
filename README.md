@@ -70,7 +70,12 @@ https://github.com/binghamtonuniversity-cs110/final-project-sum19-joke
 * A copy of your ATP
 
 | Step                  | Procedure     | Expected Results  | Actual Results |
-| ----------------------|:-------------:| -----------------:| -------------- |
-|  1  | Run Counter Program  | GUI window appears with count = 0  |          |
-|  2  | click count button  | display changes to count = 1 |                 |
+| ----------------------|:-------------:| :-----------------| -------------- |
+|  1  | Open terminal, navigate to the folder, and type 'python3 main.py' in terminal  | The program starts and displays a start screen.  |          |
+|  2  | Left click on 'RULES' button  | The program now displays its rules on screen. |                 |
+|  3  | Tap on 'ESC' key  | The program now goes back to the start screen.  | |
+|  4  | Left click on 'CREDIT' button  | The program now displays credits and acknowledgements on screen.  | |
+|  5  | Tap on 'ESC' key  | The program now goes back to the start screen.  | |
+|  6  | Left click on 'START' button  | The program displays a menu page, in which there are 3 buttons with different country names.  | |
+|  7  | Left click on 'China' button  | The program displays a game screen; in the upperleft corner, there is a health bar (which displays how many times users can fail) with 3 health initially and a scoreboard (which displays the score users have earned) with 0 score initially; at the bottom of the screen, there is a rectangle-shaped type-in box and it displays numbers (integers, floats, and negative numbers) that users typed in.
 etc...

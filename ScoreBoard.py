@@ -9,11 +9,11 @@ class ScoreBoard:
         self.rect = self.image.get_rect()
         self.rect.center = pos
         
-    def update(self):
+    def update(self, amount=1):
         '''
             Updates the score when the user answers a question correctly
             args: none
             return: none
         '''
-        self.score += 1
+        self.score += amount
         self.image = pg.font.SysFont('arial', self.size).render(str(self.score), True, self.color)

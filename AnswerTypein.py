@@ -5,29 +5,16 @@ class AnswerTypein(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self)
         self.text_color = text_color
         self.bg_color = bg_color
-        self.keys = {
-            pg.K_MINUS: '-',
-            pg.K_PERIOD: '.',
-            pg.K_0: '0',
-            pg.K_1: '1',
-            pg.K_2: '2',
-            pg.K_3: '3',
-            pg.K_4: '4',
-            pg.K_5: '5',
-            pg.K_6: '6',
-            pg.K_7: '7',
-            pg.K_8: '8',
-            pg.K_9: '9',
-        }
+
         self.result = ''
         self.res = None
         self.image = pg.font.SysFont('arial', 45).render(self.result, True, self.text_color)
-        self.rect = pg.Rect(10, 713, 1004, 45)
+        self.rect = pg.Rect(10, 708, 1004, 50)
 
-        self.bg_image = pg.Surface((1004, 45), pg.SRCALPHA) # without pg.SCRALPHA, the surface does not accept transparency
+        self.bg_image = pg.Surface((1004, 50), pg.SRCALPHA) # without pg.SCRALPHA, the surface does not accept transparency
         self.bg_image.fill(self.bg_color)
         self.bg_rect = self.bg_image.get_rect()
-        self.bg_rect.topleft = (10, 713)
+        self.bg_rect.topleft = (10, 708)
 
     def __str__(self):
         '''
@@ -37,22 +24,28 @@ class AnswerTypein(pg.sprite.Sprite):
         '''
         return self.result
 
-    def update(self, key):
+    def update(self, event=None):
         '''
             Updates the Typein field with user input
             args: Pygame keyboard constant
             return: none
         '''
         self.res = None
-        if key == pg.K_BACKSPACE and len(self.result) != 0: # backspace key
-            self.result = self.result[:-1]
-        elif key == pg.K_MINUS and len(self.result) != 0: # minus key; prevent users type in minus if there is number typed in already
+        if event is None:
+            self.result = ''
+        elif event.key == pg.K_BACKSPACE: # backspace key
+            if len(self.result) != 0:
+                self.result = self.result[:-1]
+            else:
+                pass
+        elif event.key == pg.K_MINUS and len(self.result) != 0: # minus key; prevent users type in minus if there is number typed in already
             pass
-        elif key == pg.K_RETURN: # return key (or enter key)
+        elif event.key == pg.K_RETURN: # return key (or enter key)
             self.res = self.result
             self.result = ''
         else:
-            self.result += self.keys.get(key, '') # if the key is not a number, add nothing
+            self.result += event.unicode # this unicode attribute makes life so much easier :) thanks pygame
+
         self.image = pg.font.SysFont('arial', 45).render(self.result, True, self.text_color)
 
     def submit(self):
