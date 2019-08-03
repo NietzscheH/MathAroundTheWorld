@@ -90,8 +90,7 @@ https://github.com/binghamtonuniversity-cs110/final-project-sum19-joke
 |  17  | Type the correct answer to the problem in the Question Box that is closest to the bottom of the screen.  | The number typed appears in the Answer Type-In Box.  | |
 |  18  | Press 'ENTER' key.  | The Answer Type-In Box clears. The Question Box disappears and a chime sound plays. The ScoreBoard is updated. | |
 |  19  | Allow a total of 4 Question Boxes to hit the ground.  | 'Math Around the World' displays Game Over and shows the user's score.  | |
-|  20  | Left click on 'Play Again' button.  | 'Math Around the World' goes back to the Country Selection Screen. Background music plays.  | |
-|  21  |  Tap 'ESC' key.  | 'Math Around the World' goes back to the Menu Screen. Background music plays. | |
-|  22  | Left click on 'CREDITS' button  | 'Math Around the World' displays credits and acknowledgements on the screen.  | |
-|  23  | Tap 'ESC' key.  | 'Math Around the World' goes back to the Menu Screen.  | |
-|  24  | Tap 'ESC' key.  | 'Math Around the World' closes.  | |
+|  20  | Left click on 'Play Again' button.  | 'Math Around the World' goes back to the Menu Screen. Background music plays.  | |
+|  21  | Left click on 'CREDITS' button  | 'Math Around the World' displays credits and acknowledgements on the screen.  | |
+|  22  | Tap 'ESC' key.  | 'Math Around the World' goes back to the Menu Screen.  | |
+|  23  | Tap 'ESC' key.  | 'Math Around the World' closes.  | |
