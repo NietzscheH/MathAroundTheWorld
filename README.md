@@ -1,6 +1,6 @@
 :warning: Everything between << >> needs to be replaced
 
-# Math Around World
+# Math Around the World
 ## CS 110 Final Project
 ### Summer 2019
 ### [Assignment Description](https://docs.google.com/document/d/1d6wcXns0hz7HcUr4yF_tJK3QBx3daybmJO3dREPxABA/edit?usp=sharing)
@@ -16,7 +16,7 @@ https://github.com/binghamtonuniversity-cs110/final-project-sum19-joke
 ***
 
 ## Project Description
-(tentative) This is a math game called 'Math Around World.' In this game, you will see math problems with increasing difficulties. Hurry up! They are dropping down! Do not let the problems touch the ground or else you lose the game. You will also have a chance to interact with cultural elements like British, China, India, etc.
+(tentative) This is a math game called 'Math Around the World.' In this game, you will see math problems with increasing difficulties. Hurry up! They are dropping down! Do not let the problems touch the ground or else you lose the game. You will also have a chance to interact with cultural elements from China, Egypt, and Italy.
 
 ***    
 
@@ -71,11 +71,27 @@ https://github.com/binghamtonuniversity-cs110/final-project-sum19-joke
 
 | Step                  | Procedure     | Expected Results  | Actual Results |
 | ----------------------|:-------------:| :-----------------| -------------- |
-|  1  | Open terminal, navigate to the folder, and type 'python3 main.py' in terminal  | The program starts and displays a start screen.  |          |
-|  2  | Left click on 'RULES' button  | The program now displays its rules on screen. |                 |
-|  3  | Tap on 'ESC' key  | The program now goes back to the start screen.  | |
-|  4  | Left click on 'CREDIT' button  | The program now displays credits and acknowledgements on screen.  | |
-|  5  | Tap on 'ESC' key  | The program now goes back to the start screen.  | |
-|  6  | Left click on 'START' button  | The program displays a menu page, in which there are 3 buttons with different country names.  | |
-|  7  | Left click on 'China' button  | The program displays a game screen; in the upperleft corner, there is a health bar (which displays how many times users can fail) with 3 health initially and a scoreboard (which displays the score users have earned) with 0 score initially; at the bottom of the screen, there is a rectangle-shaped type-in box and it displays numbers (integers, floats, and negative numbers) that users typed in.
-etc...
+|  1  | Open terminal, navigate to the final project folder, and type 'python3 main.py' in the terminal.  | 'Math Around the World' starts and displays the Menu Screen. Background music plays.  |  |
+|  2  | Left click on 'RULES' button.  | 'Math Around the World' displays the Rules Screen. Background music plays. | |
+|  3  | Tap 'ESC' key.  | 'Math Around the World' goes back to the Menu Screen. Background music plays. | |
+|  4  | Left click on 'START' button.  | 'Math Around the World' displays the Country Selection Screen with buttons for China, Egypt, and Italy. Background music plays. | |
+|  5  | Left click on 'China' button.  | 'Math Around the World' displays a game screen with China-themed background, icons, and music. In the upper left corner, a Health Bar displays 3 Health Icons, which represent the number of times the user can fail before the game ends, and a ScoreBoard, which is initially set to 0 for regular game play and will be updated as the user earns points. At the bottom of the screen, there is a rectangle-shaped Answer Type-In Box for displaying the values typed by the user. Question Boxes with math problems begin descending from the top of the screen.  | |
+|  6  | Type '100'.  | The number 100 appears in the Answer Type-In Box.  | |
+|  7  | Tap 'BACKSPACE' key once.  | The final 0 will be removed from the number in the Answer Type-In Box, leaving '10'.  | |
+|  8  | Press 'ENTER' key.  | The Answer Type-In Box clears. If 10 is the answer to the problem in the Question Box that is closest to the ground, the Question Box disappears and a chime sound plays. Otherwise, a buzzer sound plays, and the Question Box keeps falling. If a Question Box hits the ground before its correct answer is entered, a clunk sound plays and one Health Icon is removed from the Health Bar.  | |
+|  9  |  Tap 'ESC' key.  | 'Math Around the World' goes back to the Menu Screen. Background music plays. | |
+|  10  | Left click on 'START' button.  | 'Math Around the World' displays the Country Selection Screen with buttons for China, Egypt, and Italy. Background music plays. | |
+|  11  | Left click on 'Egypt' button.  | 'Math Around the World' displays a game screen with Egypt-themed background, icons, and music. In the upper left corner, a Health Bar displays 3 Health Icons, which represent the number of times the user can fail before the game ends, and a ScoreBoard, which is initially set to 0 for regular game play and will be updated as the user earns points. At the bottom of the screen, there is a rectangle-shaped Answer Type-In Box for displaying the values typed by the user. Question Boxes with math problems begin descending from the top of the screen.  | |
+|  12  | Type '-2.5'.  | The number -2.5 appears in the Answer Type-In Box.  | |
+|  13  | Press 'ENTER' key.  | The Answer Type-In Box clears. If -2.5 is the answer to the problem in the Question Box that is closest to the ground, the Question Box disappears and a chime sound plays. Otherwise, a buzzer sound plays, and the Question Box keeps falling. If a Question Box hits the ground before its correct answer is entered, a clunk sound plays and one Health Icon is removed from the Health Bar. | |
+|  14  |  Tap 'ESC' key.  | 'Math Around the World' goes back to the Menu Screen. Background music plays. | |
+|  15  | Left click on 'START' button.  | 'Math Around the World' displays the Country Selection Screen with buttons for China, Egypt, and Italy. Background music plays. | |
+|  16  | Left click on 'Italy' button.  | 'Math Around the World' displays a game screen with Italy-themed background, icons, and music. In the upper left corner, a Health Bar displays 3 Health Icons, which represent the number of times the user can fail before the game ends, and a ScoreBoard, which is initially set to 0 for regular game play and will be updated as the user earns points. At the bottom of the screen, there is a rectangle-shaped Answer Type-In Box for displaying the values typed by the user. Question Boxes with math problems begin descending from the top of the screen.  | |
+|  17  | Type the correct answer to the problem in the Question Box that is closest to the bottom of the screen.  | The number typed appears in the Answer Type-In Box.  | |
+|  18  | Press 'ENTER' key.  | The Answer Type-In Box clears. The Question Box disappears and a chime sound plays. The ScoreBoard is updated. | |
+|  19  | Allow a total of 4 Question Boxes to hit the ground.  | 'Math Around the World' displays Game Over and shows the user's score.  | |
+|  20  | Left click on 'Play Again' button.  | 'Math Around the World' goes back to the Country Selection Screen. Background music plays.  | |
+|  21  |  Tap 'ESC' key.  | 'Math Around the World' goes back to the Menu Screen. Background music plays. | |
+|  22  | Left click on 'CREDITS' button  | 'Math Around the World' displays credits and acknowledgements on the screen.  | |
+|  23  | Tap 'ESC' key.  | 'Math Around the World' goes back to the Menu Screen.  | |
+|  24  | Tap 'ESC' key.  | 'Math Around the World' closes.  | |
