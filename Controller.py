@@ -21,7 +21,7 @@ class Controller:
         pg.display.set_caption('v2.1')
         self.mouse_x, self.mouse_y = None, None
 
-        # some users' identities are created here
+        # create initial settings and user statistics
         self.questions = pg.sprite.Group()
         self.pop_up = None
         self.timer = []
@@ -37,7 +37,7 @@ class Controller:
         self.credit_button = MB((512,574), 'creditbasic.png', 'credithover.png')
 
         self.China_button = MenuButton('China', (512, 304), 60, (197,31,31))
-        self.Egypt_button = MenuButton('Eygpt', (512, 384), 60, (222,211,140))
+        self.Egypt_button = MenuButton('Egypt', (512, 384), 60, (222,211,140))
         self.Italy_button = MenuButton('Italy', (512, 464), 60, (179,214,110))
         self.again_button = MenuButton('Start Again', (512, 410), 60, (112,128,144))
         self.ans_typein = AnswerTypein() # the type in box object
@@ -87,9 +87,11 @@ class Controller:
 
     def createQuestionBox(self, country):
         '''
-            this method creates a questions box object and put it in a sprite group.
+            Creates a Question Box object and puts it in a sprite group
+            args: country ('str') name of country
+            return: none
         '''
-        x = random.randrange(100, 924) # leave 100pixels on both sides
+        x = random.randrange(100, 924) # leave 100 pixels on both sides
         problem_obj = QG()
 
         if self.score <= 10:
@@ -100,7 +102,11 @@ class Controller:
 
     def deleteOutscreenBox(self):
         '''
-            this method deletes box objects that are out of the screen/ touching the bottom
+            Deletes Question Box object that is out of the screen
+                or touching the ground, plays sound effect,
+                and updates user's status
+            args: none
+            return: none
         '''
         for sp in self.questions:
             if sp.ycor > self.screen.get_rect().size[1] - sp.height - 65:
@@ -114,7 +120,9 @@ class Controller:
 
     def drawStart(self):
         '''
-            show the start button on the screen
+            Displays the Menu Screen
+            args: none
+            return: none
         '''
         self.screen.fill((135,206,250))
         self.screen.blit(self.bg_start_screen[self.bg_start_screen_index//10], self.screen.get_rect()) # draw the earth gif; notice that it's slowed here
@@ -129,19 +137,24 @@ class Controller:
 
     def drawMenu(self):
         '''
-            show the menu on the screen
+            Displays the Country Selection Screen
+            args: none
+            return: none
         '''
         self.screen.fill((175,215,237))
         for button in [self.China_button, self.Egypt_button, self.Italy_button]:
             if self.isOver(button.rect): button.isOver()
             else: button.notOver()
 
-        # blits them; the para the blits() takes is a sequence, e.g. here we are using 3 tuples inside 1 tuple and that 1 tuple is parsed into blits()
+        # blits them; the parameter that blits() takes is a sequence, e.g. here we are using 3 tuples inside 1 tuple and that 1 tuple is parsed into blits()
         self.screen.blits(((self.China_button.image, self.China_button.rect), (self.Egypt_button.image, self.Egypt_button.rect), (self.Italy_button.image, self.Italy_button.rect)))
 
     def drawEnd(self):
         '''
-            show the result page
+            Displays the user's final score and offers the option
+                to play again
+            args: none
+            return: none
         '''
         self.screen.fill((190,231,233))
 
@@ -149,6 +162,7 @@ class Controller:
         score_record = SB(self.score, (512,330), 60, (244,96,108)) # this is just another scoreboard object with different position, size, and color
         self.screen.blit(score_record.image, score_record.rect)
 
+        # detect whether mouse is over Play Again button
         if self.isOver(self.again_button.rect):
             self.again_button.isOver()
         else:
@@ -157,7 +171,10 @@ class Controller:
 
     def isOver(self, rect):
         '''
-            this method checks if mouse is over the rect
+            Checks whether mouse is over a Pygame Rectangle object
+            args: rect ('Rectangle') Pygame Rectangle object
+            return: ('bool') True if mouse is over the Rectangle object;
+                    False if the mouse is not over the Rectangle object
         '''
         if rect.center[0] - rect.size[0]/2 < self.mouse_x < rect.center[0] + rect.size[0]/2 and rect.center[1] - rect.size[1]/2 < self.mouse_y < rect.center[1] + rect.size[1]/2:
             return True
@@ -166,13 +183,19 @@ class Controller:
 
     def drawGame(self, density, country):
         '''
-            start dropping boxes down
+            Populates Game Screen with Question Boxes
+            args:
+                  density ('int') represents rate at which Question Boxes
+                      are generated
+                  country ('str') name of country
+            return: density ('int') represents rate at which Question Boxes
+                      are generated
         '''
         if self.score in (3,): # do a pop-up question and freeze the dropping questions
             self.pop_up = PopUp(self.score)
             self.timer.append(time())
             self.screen.blit(self.pop_up.image, self.pop_up.rect)
-            if time() - self.timer[0] >= 5: # if users cannot answer the pop-up question in a certain amount of time, they would lose their chance
+            if time() - self.timer[0] >= 5: # if user does answer the pop-up question in a certain amount of time, they would lose their chance
                 self.timer = []
                 self.pop_up = None
                 self.score += 0.01
@@ -193,7 +216,10 @@ class Controller:
 
     def checkAns(self, ans_submitted):
         '''
-            check answer submitted by users
+            Compares answer submitted by user with expected answer;
+                updates user status for correct answers
+            args: ans_submitted ('str') answer typed and entered by user
+            return: none
         '''
         if self.pop_up is not None:
             if self.pop_up.problems[self.score]['ans'] == ans_submitted:
@@ -213,7 +239,7 @@ class Controller:
                 if sp.answer == ans_submitted:
                     self.sound_effect['right'].play()
                     self.score_board.update() # in update(), the score will + 1
-                    self.score = int((self.score + 1)//1) # see line 199
+                    self.score = int((self.score + 1)//1)
                     self.questions.remove(sp)
                 else:
                     self.sound_effect['wrong'].play()
@@ -222,6 +248,11 @@ class Controller:
 
 
     def startLoop(self):
+        '''
+            Loop for main Menu Screen
+            args: none
+            return: none
+        '''
         self.mouse_x, self.mouse_y = pg.mouse.get_pos()
         self.drawStart()
         for event in pg.event.get():
@@ -235,9 +266,14 @@ class Controller:
                 elif self.rules_button.rect.collidepoint(self.mouse_x, self.mouse_y):
                     self.STATE = 'rules'
                 elif self.credit_button.rect.collidepoint(self.mouse_x, self.mouse_y):
-                    self.STATE = 'credt'
+                    self.STATE = 'credit'
 
     def menuLoop(self):
+        '''
+            Loop for Country Selection Screen
+            args: none
+            return: none
+        '''
         self.mouse_x, self.mouse_y = pg.mouse.get_pos()
         self.drawMenu()
         for event in pg.event.get():
@@ -255,6 +291,11 @@ class Controller:
                     self.STATE = 'game Egypt'
 
     def ruleLoop(self):
+        '''
+            Loop for Rules Screen
+            args: none
+            return: none
+        '''
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit() #sys.exit()
@@ -262,6 +303,11 @@ class Controller:
                 self.STATE = 'start'
 
     def creditLoop(self):
+        '''
+            Loop for Credits Screen
+            args: none
+            return: none
+        '''
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit() #sys.exit()
@@ -269,10 +315,19 @@ class Controller:
                 self.STATE = 'start'
 
     def gameLoop(self, density, country):
+        '''
+            Loop for Country Selection Screen
+            args:
+                  density ('int') represents rate at which Question Boxes
+                      are generated
+                  country ('str') name of country
+            return: density ('int') represents rate at which Question Boxes
+                      are generated
+        '''
         # adjust volume to create a fade in here
         density = self.drawGame(density, country)
-        self.screen.blit(self.ans_typein.bg_image, self.ans_typein.bg_rect) # draw the background before drawing the text that users put in
-        self.ans.draw(self.screen) # draw the text that users type in
+        self.screen.blit(self.ans_typein.bg_image, self.ans_typein.bg_rect) # draw the background before drawing the text that user types in
+        self.ans.draw(self.screen) # draw the text that user types in
 
 
         for event in pg.event.get():
@@ -285,11 +340,16 @@ class Controller:
 
                 ans_submitted = self.ans_typein.submit()
                 if ans_submitted is None: pass
-                else: self.checkAns(ans_submitted) # ans_submiited will not be None if users hit ENTER key with numbers typed in
+                else: self.checkAns(ans_submitted) # ans_submitted will not be None if user hit ENTER key with numbers typed in
         self.screen.blits(((self.score_board.image, self.score_board.rect), (self.health_bar.byCountry(country), self.health_bar.rect)))
         return density
 
     def endLoop(self):
+        '''
+            Loop for end of game
+            args: none
+            return: none
+        '''
         self.mouse_x, self.mouse_y = pg.mouse.get_pos()
         self.drawEnd()
         for event in pg.event.get():
@@ -300,6 +360,12 @@ class Controller:
                     self.STATE = 'start'
 
     def mainloop(self):
+        '''
+            Loop that handles events, updates state, 
+                and redraws screen
+            args: none
+            return: none
+        '''
         # loop it, or say, run it
         while True: # without this loop, the game will exit automatically after clicking 'start again', because there is no codes after while STATE == 'end' loop
             density = 0
