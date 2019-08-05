@@ -1,20 +1,42 @@
 import pygame as pg
+from os import path
 
 class MenuButton:
-    def __init__(self, text, pos, size=60, defualt_color=(0,0,0), hover_color=(255,255,255)):
-        self.defualt_color = defualt_color
-        self.hover_color = hover_color
-        self.text = text
-        f = pg.font.SysFont(None, size)
-        self.image = f.render(self.text, True, self.defualt_color)
+    def __init__(self, pos, default_pic, hover_pic):
+        self.base_path = path.dirname(__file__)
+        self.default_pic_path = path.join(self.base_path, 'assets', 'Buttons', default_pic)
+        self.hover_pic_path = path.join(self.base_path, 'assets', 'Buttons', hover_pic)
+
+        self.pos = pos
+        self.image = pg.image.load(self.default_pic_path)
         self.rect = self.image.get_rect()
-        self.rect.center = pos
+        self.rect.center = self.pos
 
     def __str__(self):
+        '''
+            Stringification of MenuButton object
+            args: none
+            return: ('str') a string representation of the central point of
+                    the MenuButton object
+        '''
         return str(self.rect.center)
 
     def isOver(self):
-        self.image = pg.font.SysFont(None, 60).render(self.text, True, self.hover_color)
+        '''
+            Changes appearance when the pointer is hovering over MenuButton
+            args: none
+            return: none
+        '''
+        self.image = pg.image.load(self.hover_pic_path)
+        self.rect = self.image.get_rect()
+        self.rect.center = self.pos
 
     def notOver(self):
-        self.image = pg.font.SysFont(None, 60).render(self.text, True, self.defualt_color)
+        '''
+            Sets appearance when the pointer is not hovering over MenuButton
+            args: none
+            return: none
+        '''
+        self.image = pg.image.load(self.default_pic_path)
+        self.rect = self.image.get_rect()
+        self.rect.center = self.pos

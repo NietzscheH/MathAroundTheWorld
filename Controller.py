@@ -2,15 +2,13 @@ import pygame as pg
 from QuestionBox import QuestionBox as QB
 from PopUpQuestionBox import PopUpQuestionBox as PopUp
 from QuestionGenerator import QuestionGenerator as QG
-from MenuButton import MenuButton
-from MenuButton_ import MenuButton_ as MB
+from MenuButton import MenuButton as MB
 from AnswerTypein import AnswerTypein
 from ScoreBoard import ScoreBoard as SB
 from HealthIcon import HealthIcon as HI
 import random
 from os import path
-from time import time
-
+from time import time, sleep
 
 class Controller:
     def __init__(self):
@@ -18,35 +16,36 @@ class Controller:
         pg.init()
         pg.mixer.init()
         self.screen = pg.display.set_mode((1024, 768))
-        pg.display.set_caption('v2.1')
+        pg.display.set_caption('v2.2')
         self.mouse_x, self.mouse_y = None, None
+        self.fps = 30
 
         # create initial settings and user statistics
         self.questions = pg.sprite.Group()
         self.pop_up = None
+        self.pop_show = False
         self.timer = []
         self.count = 0 # currently has no use
-        self.lives = 3
-        self.score = 0
-        self.density = 240 # it means problems will be generated every 480 frames
-        self.speed = 1 # the speed of question boxes
+        self.lives = 3 # You can change numbers here to test for a particular situation but it only applies once
+        self.score = 0 # You can change numbers here to test for a particular situation but it only applies once
+        self.density = 90
+        self.speed = 1.5 # the speed of question boxes
 
         # some buttons are created here
         self.start_button = MB((512,404), 'startbasic.png', 'starthover.png')
         self.rules_button = MB((512,489), 'rulesbasic.png', 'ruleshover.png')
         self.credit_button = MB((512,574), 'creditbasic.png', 'credithover.png')
-
-        self.China_button = MenuButton('China', (512, 304), 60, (197,31,31))
-        self.Egypt_button = MenuButton('Egypt', (512, 384), 60, (222,211,140))
-        self.Italy_button = MenuButton('Italy', (512, 464), 60, (179,214,110))
-        self.again_button = MenuButton('Start Again', (512, 410), 60, (112,128,144))
+        self.again_button = MB((512,410),'start_again.png', 'start_again.png')
+        self.China_button = MB((275,190), path.join('country_selection', 'china_country_selection.png'), path.join('country_selection', 'china_country_selection_blur.png'))
+        self.Egypt_button = MB((275,540), path.join('country_selection', 'egypt_country_selection.png'), path.join('country_selection', 'egypt_country_selection_blur.png'))
+        self.Italy_button = MB((755,190), path.join('country_selection', 'italy_country_selection.png'), path.join('country_selection', 'italy_country_selection_blur.png'))
         self.ans_typein = AnswerTypein() # the type in box object
         self.ans = pg.sprite.Group() # the sprite group for the type in box object
         self.ans.add(self.ans_typein)
 
         # scoreboard and health bar objects
-        self.score_board = SB()
-        self.health_bar = HI()
+        self.score_board = SB(self.score)
+        self.health_bar = HI(self.lives)
 
         self.STATE = 'start'
 
@@ -58,11 +57,16 @@ class Controller:
             'hit': pg.mixer.Sound(path.join(base_path, 'assets', 'sound', 'sound_effects', 'clunk.wav'))
         }
         for i in self.sound_effect.keys():
-            self.sound_effect[i].set_volume(0.15)
+            self.sound_effect[i].set_volume(0.08)
 
         # background image
         self.bg_start_screen_index = 0
-        self.bg_start_screen = [pg.image.load(path.join(base_path, 'assets', 'Background', 'earth_start_screen', 'frame_{}_delay-0.1s.png'.format(x))) for x in range(39)]
+        self.bg_start_screen = [pg.image.load(path.join(base_path, 'assets', 'Background', 'earth_start_screen', 'start_screen{}.png'.format(x))) for x in range(1,40)]
+
+        self.bg_menu = pg.image.load(path.join(base_path, 'assets', 'Background', 'country_selection_background.jpg'))
+
+        self.bg_rules_and_credit_index = 0
+        self.bg_rules_and_credit = [pg.image.load(path.join(base_path, 'assets', 'Background', 'rules_and_credit_bg', 'rules_and_credit_bg{}.png'.format(x))) for x in range(1,40)]
 
         self.bg_by_country = {
             'China': pg.image.load(path.join(base_path, 'assets', 'Background', 'background_china.png')),
@@ -72,18 +76,25 @@ class Controller:
 
         self.icons_by_country = {
             'China': ['China.png', 'China_bot.png'],
-            'Egypt': ['Egypt.png', 'Egypt_bot.png'],
+            'Egypt': ['Egypt.png', 'Egypt_bot_0.png'],
             'Italy': ['Italy.png', 'Italy_bot.png']
         }
 
         # background music
         self.volume = 0
-        self.bgm_player = pg.mixer.music
+        self.bgm_start = pg.mixer.Sound(path.join(base_path, 'assets', 'sound', 'music', 'MenuScreens.wav'))
+        self.bgm_start.set_volume(0.15)
+        self.bgm_credit = pg.mixer.Sound(path.join(base_path, 'assets', 'sound', 'music', 'CreditsScreen.wav'))
+        self.bgm_credit.set_volume(0.1)
+
         self.bgm_by_country = {
-            'China': [path.join(base_path, 'assets', 'China_BGM_1.mp3')],
-            'Egypt': [None],
-            'Italy': [None]
+            'China': [pg.mixer.Sound(path.join(base_path, 'assets', 'sound', 'music', 'China{}.wav'.format(x))) for x in range(1,4)],
+            'Egypt': [pg.mixer.Sound(path.join(base_path, 'assets', 'sound', 'music', 'Egypt{}.wav'.format(x))) for x in range(1,4)],
+            'Italy': [pg.mixer.Sound(path.join(base_path, 'assets', 'sound', 'music', 'Italy{}.wav'.format(x))) for x in range(1,4)]
         }
+        for i in self.bgm_by_country.keys():
+            for g in self.bgm_by_country[i]:
+                g.set_volume(0.1)
 
     def createQuestionBox(self, country):
         '''
@@ -94,11 +105,191 @@ class Controller:
         x = random.randrange(100, 924) # leave 100 pixels on both sides
         problem_obj = QG()
 
-        if self.score <= 10:
-            problem = problem_obj.level_1()
-            self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
-            print(problem)
-        else: self.questions.add(QB(x, self.speed))
+        if country == 'China':
+            if self.score <= 5:
+                self.density, self.speed = 90, 1.5
+                problem = problem_obj.level_1()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 15:
+                self.density, self.speed = 90, 1.5
+                problem = problem_obj.level_2()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 30:
+                self.density, self.speed = 60, 1.5
+                problem = problem_obj.level_2()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 50:
+                self.density, self.speed = 90, 1
+                problem = problem_obj.level_3()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 60:
+                self.density, self.speed = 90, 1.2
+                problem = problem_obj.level_3()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 80:
+                self.density, self.speed = 60, 1.2
+                problem = problem_obj.level_3()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 100:
+                self.density, self.speed = 120, 1
+                problem = problem_obj.level_4()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 130:
+                self.density, self.speed = 90, 1
+                problem = problem_obj.level_4()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 150:
+                self.density, self.speed = 60, 1.2
+                problem = problem_obj.level_4()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 175:
+                self.density, self.speed = 120, 1
+                problem = problem_obj.level_5()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 200:
+                self.density, self.speed = 90, 1
+                problem = problem_obj.level_5()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            else:
+                self.density, self.speed = 90, 1
+                problem = [problem_obj.level_5(), problem_obj.level_6()][random.randint(0,1)]
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+
+        elif country == 'Egypt':
+            if self.score <= 10:
+                self.density, self.speed = 90, 1.5
+                problem = problem_obj.level_1()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 20:
+                self.density, self.speed = 90, 1.5
+                problem = problem_obj.level_2()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 30:
+                self.density, self.speed = 60, 1.5
+                problem = problem_obj.level_2()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 50:
+                self.density, self.speed = 120, 1
+                problem = problem_obj.level_3()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 60:
+                self.density, self.speed = 90, 1
+                problem = problem_obj.level_3()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 80:
+                self.density, self.speed = 90, 1.2
+                problem = problem_obj.level_3()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 100:
+                self.density, self.speed = 120, 1
+                problem = problem_obj.level_4()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 130:
+                self.density, self.speed = 90, 1
+                problem = problem_obj.level_4()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 150:
+                self.density, self.speed = 90, 1.2
+                problem = problem_obj.level_4()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 175:
+                self.density, self.speed = 120, 1
+                problem = problem_obj.level_5()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 200:
+                self.density, self.speed = 90, 1
+                problem = problem_obj.level_5()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            else:
+                self.density, self.speed = 90, 1
+                problem = [problem_obj.level_5(), problem_obj.level_6()][random.randint(0,1)]
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+
+        elif country == 'Italy':
+            if self.score <= 15:
+                self.density, self.speed = 90, 1.5
+                problem = problem_obj.level_1()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 30:
+                self.density, self.speed = 90, 1.5
+                problem = problem_obj.level_2()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 45:
+                self.density, self.speed = 60, 1.5
+                problem = problem_obj.level_2()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 60:
+                self.density, self.speed = 120, 1
+                problem = problem_obj.level_3()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 75:
+                self.density, self.speed = 90, 1
+                problem = problem_obj.level_3()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 100:
+                self.density, self.speed = 90, 1.2
+                problem = problem_obj.level_3()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 120:
+                self.density, self.speed = 120, 1
+                problem = problem_obj.level_4()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 140:
+                self.density, self.speed = 90, 1
+                problem = problem_obj.level_4()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 160:
+                self.density, self.speed = 90, 1.2
+                problem = problem_obj.level_4()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 180:
+                self.density, self.speed = 120, 1
+                problem = problem_obj.level_5()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            elif self.score <= 200:
+                self.density, self.speed = 90, 1
+                problem = problem_obj.level_5()
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
+            else:
+                self.density, self.speed = 90, 1
+                problem = [problem_obj.level_5(), problem_obj.level_6()][random.randint(0,1)]
+                self.questions.add(QB(x, self.speed, self.icons_by_country[country][0], problem[0], problem[1]))
+                print(problem)
 
     def deleteOutscreenBox(self):
         '''
@@ -115,6 +306,8 @@ class Controller:
                 self.health_bar.update()
                 self.lives -= 1
                 if self.lives < 0:
+                    pg.mixer.fadeout(3000)
+                    self.bgm_start.play(-1, 0, 3000)
                     self.STATE = 'end'
             break # it only needs to run once per frame
 
@@ -124,9 +317,8 @@ class Controller:
             args: none
             return: none
         '''
-        self.screen.fill((135,206,250))
-        self.screen.blit(self.bg_start_screen[self.bg_start_screen_index//10], self.screen.get_rect()) # draw the earth gif; notice that it's slowed here
-        self.bg_start_screen_index += + 1 if self.bg_start_screen_index < 389 else -388
+        self.screen.blit(self.bg_start_screen[self.bg_start_screen_index//(self.fps//6)], (0,0)) # draw the earth gif
+        self.bg_start_screen_index += 1 if self.bg_start_screen_index < self.fps * 39//6 - 1 else -(self.fps * 39//6 - 1)
 
         for button in [self.start_button, self.rules_button, self.credit_button]:
             if self.isOver(button.rect):
@@ -141,13 +333,67 @@ class Controller:
             args: none
             return: none
         '''
-        self.screen.fill((175,215,237))
+        self.screen.blit(self.bg_menu, (0,0))
         for button in [self.China_button, self.Egypt_button, self.Italy_button]:
             if self.isOver(button.rect): button.isOver()
             else: button.notOver()
 
         # blits them; the parameter that blits() takes is a sequence, e.g. here we are using 3 tuples inside 1 tuple and that 1 tuple is parsed into blits()
         self.screen.blits(((self.China_button.image, self.China_button.rect), (self.Egypt_button.image, self.Egypt_button.rect), (self.Italy_button.image, self.Italy_button.rect)))
+
+    def drawRules(self):
+        '''
+            Ruels
+        '''
+        self.screen.blit(self.bg_rules_and_credit[self.bg_rules_and_credit_index//(self.fps//6)], (0,0)) # draw the background gif
+        self.bg_rules_and_credit_index += 1 if self.bg_rules_and_credit_index < self.fps * 39//6 - 1 else -(self.fps * 39//6 - 1)
+        self.screen.blit(self.rules_button.image, (50,50))
+
+    def drawCredit(self):
+        '''
+            show credit
+        '''
+        self.screen.blit(self.bg_rules_and_credit[self.bg_rules_and_credit_index//(self.fps//6)], (0,0)) # draw the background gif
+        self.bg_rules_and_credit_index += 1 if self.bg_rules_and_credit_index < self.fps * 39//6 - 1 else -(self.fps * 39//6 - 1)
+        self.screen.blit(self.credit_button.image, (50,50))
+
+    def drawGame(self, density, country):
+        '''
+            Populates Game Screen with Question Boxes
+            args:
+                  density ('int') represents rate at which Question Boxes
+                      are generated
+                  country ('str') name of country
+            return: density ('int') represents rate at which Question Boxes
+                      are generated
+        '''
+        if self.score in (1,): # do a pop-up question and freeze the dropping questions
+            self.pop_up = PopUp(self.score)
+            self.timer.append(time())
+            self.screen.blit(self.pop_up.image, self.pop_up.rect)
+            if self.pop_show:
+                self.pop_up.draw()
+                self.pop_show = False
+            else:
+                pass
+            if time() - self.timer[0] >= 60: # if user does answer the pop-up question in a certain amount of time, they would lose their chance
+                self.timer = []
+                self.pop_up = None
+                self.score += 0.01
+        else:
+            self.screen.blit(self.bg_by_country[country], (0,0))
+            if density >= self.density: # the bigger the density is, the slower the game goes
+                self.createQuestionBox(country)
+                density = 0
+            density += 1
+
+            for sp in self.questions:
+                sp.filename = self.icons_by_country[country][1] # change the background image of the bottom most question
+                break
+            self.questions.update()
+            self.questions.draw(self.screen)
+            self.deleteOutscreenBox()
+        return density
 
     def drawEnd(self):
         '''
@@ -156,13 +402,13 @@ class Controller:
             args: none
             return: none
         '''
-        self.screen.fill((190,231,233))
+        self.screen.blit(self.bg_rules_and_credit[self.bg_rules_and_credit_index//6], (0,0)) # draw the background gif
+        self.bg_rules_and_credit_index += + 1 if self.bg_rules_and_credit_index < 233 else -233
 
         # display user's final score
-        score_record = SB(self.score, (512,330), 60, (244,96,108)) # this is just another scoreboard object with different position, size, and color
+        score_record = SB(self.score, (512,270), 60, (244,96,108)) # this is just another scoreboard object with different position, size, and color
         self.screen.blit(score_record.image, score_record.rect)
 
-        # detect whether mouse is over Play Again button
         if self.isOver(self.again_button.rect):
             self.again_button.isOver()
         else:
@@ -181,40 +427,7 @@ class Controller:
         else:
             return False
 
-    def drawGame(self, density, country):
-        '''
-            Populates Game Screen with Question Boxes
-            args:
-                  density ('int') represents rate at which Question Boxes
-                      are generated
-                  country ('str') name of country
-            return: density ('int') represents rate at which Question Boxes
-                      are generated
-        '''
-        if self.score in (3,): # do a pop-up question and freeze the dropping questions
-            self.pop_up = PopUp(self.score)
-            self.timer.append(time())
-            self.screen.blit(self.pop_up.image, self.pop_up.rect)
-            if time() - self.timer[0] >= 5: # if user does answer the pop-up question in a certain amount of time, they would lose their chance
-                self.timer = []
-                self.pop_up = None
-                self.score += 0.01
-        else:
-            self.screen.blit(self.bg_by_country[country], self.screen.get_rect())
-            if density == self.density: # the bigger the density is, the slower the game goes
-                self.createQuestionBox(country)
-                density = 0
-            density += 1
-
-            for sp in self.questions:
-                sp.filename = self.icons_by_country[country][1] # change the background image of the bottom most question
-                break
-            self.questions.update()
-            self.questions.draw(self.screen)
-            self.deleteOutscreenBox()
-        return density
-
-    def checkAns(self, ans_submitted):
+    def checkAns(self, ans_submitted, country):
         '''
             Compares answer submitted by user with expected answer;
                 updates user status for correct answers
@@ -227,7 +440,7 @@ class Controller:
                 if self.lives != 3:
                     self.health_bar.update(1)
                     self.lives += 1
-                    self.score += 0.01 # see line 171
+                    self.score += 0.01 # see line 171 & 164
                 else:
                     self.score_board.update(5)
                     self.score += 5
@@ -240,11 +453,17 @@ class Controller:
                     self.sound_effect['right'].play()
                     self.score_board.update() # in update(), the score will + 1
                     self.score = int((self.score + 1)//1)
+                    if self.score == 30:
+                        pg.mixer.fadeout(3000)
+                        self.bgm_by_country[country][1].play(-1, 0, 3000)
+                    elif self.score == 100:
+                        pg.mixer.fadeout(3000)
+                        self.bgm_by_country[country][2].play(-1, 0, 3000)
                     self.questions.remove(sp)
                 else:
                     self.sound_effect['wrong'].play()
                 break
-        print(self.score, self.lives)
+        #print(self.score, self.lives)
 
 
     def startLoop(self):
@@ -266,6 +485,8 @@ class Controller:
                 elif self.rules_button.rect.collidepoint(self.mouse_x, self.mouse_y):
                     self.STATE = 'rules'
                 elif self.credit_button.rect.collidepoint(self.mouse_x, self.mouse_y):
+                    pg.mixer.fadeout(3000)
+                    self.bgm_credit.play(-1, 0, 3000)
                     self.STATE = 'credit'
 
     def menuLoop(self):
@@ -283,11 +504,16 @@ class Controller:
                 self.STATE = 'start'
             elif event.type == pg.MOUSEBUTTONDOWN:
                 if self.China_button.rect.collidepoint(self.mouse_x, self.mouse_y):
-                    # start play music here
+                    pg.mixer.fadeout(3000)
+                    self.bgm_by_country['China'][0].play(-1, 0, 5000)
                     self.STATE = 'game China'
                 elif self.Italy_button.rect.collidepoint(self.mouse_x, self.mouse_y):
+                    pg.mixer.fadeout(3000)
+                    self.bgm_by_country['Italy'][0].play(-1, 0, 5000)
                     self.STATE = 'game Italy'
                 elif self.Egypt_button.rect.collidepoint(self.mouse_x, self.mouse_y):
+                    pg.mixer.fadeout(3000)
+                    self.bgm_by_country['Egypt'][0].play(-1, 0, 5000)
                     self.STATE = 'game Egypt'
 
     def ruleLoop(self):
@@ -296,6 +522,7 @@ class Controller:
             args: none
             return: none
         '''
+        self.drawRules()
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit() #sys.exit()
@@ -308,6 +535,7 @@ class Controller:
             args: none
             return: none
         '''
+        self.drawCredit()
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit() #sys.exit()
@@ -335,12 +563,14 @@ class Controller:
                 pg.quit()
             elif event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
                 self.STATE = 'menu'
+            elif event.type == pg.KEYDOWN and event.key == pg.K_BACKQUOTE:
+                self.pop_show = not self.pop_show
             elif event.type == pg.KEYDOWN:
                 self.ans.update(event)
 
                 ans_submitted = self.ans_typein.submit()
                 if ans_submitted is None: pass
-                else: self.checkAns(ans_submitted) # ans_submitted will not be None if user hit ENTER key with numbers typed in
+                else: self.checkAns(ans_submitted, country) # ans_submitted will not be None if user hit ENTER key with numbers typed in
         self.screen.blits(((self.score_board.image, self.score_board.rect), (self.health_bar.byCountry(country), self.health_bar.rect)))
         return density
 
@@ -367,32 +597,36 @@ class Controller:
             return: none
         '''
         # loop it, or say, run it
+
         while True: # without this loop, the game will exit automatically after clicking 'start again', because there is no codes after while STATE == 'end' loop
             density = 0
             self.volume = 0
+            pg.mixer.fadeout(3000) # fadeout in 3 seconds
+            self.bgm_start.play(-1, 0, 3000) # 3000 here means fadein in 3 seconds
             while self.STATE == 'start':
                 self.startLoop()
-                pg.time.Clock().tick(60) # set the frame rate to be 60 per second at most
+                pg.time.Clock().tick(self.fps) # set the frame rate to be self.fps per second at most
                 pg.display.update()
             while self.STATE == 'menu':
                 self.menuLoop()
-                pg.time.Clock().tick(60)
+                pg.time.Clock().tick(self.fps)
                 pg.display.update()
             while self.STATE == 'rules':
                 self.ruleLoop()
-                pg.time.Clock().tick(60)
+                pg.time.Clock().tick(self.fps)
                 pg.display.update()
             while self.STATE == 'credit':
                 self.creditLoop()
-                pg.time.Clock().tick(60)
+                pg.time.Clock().tick(self.fps)
                 pg.display.update()
             while self.STATE[:4] == 'game': # note the difference here
+                #print(pg.display.Info())
                 density = self.gameLoop(density, self.STATE[5:])
-                pg.time.Clock().tick(60)
+                pg.time.Clock().tick(self.fps)
                 pg.display.update()
             while self.STATE == 'end':
                 self.endLoop()
-                pg.time.Clock().tick(60)
+                pg.time.Clock().tick(self.fps)
                 pg.display.update()
 
             # reset everything

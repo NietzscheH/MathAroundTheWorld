@@ -1,7 +1,7 @@
 import pygame as pg
 
 class ScoreBoard:
-    def __init__(self, score=0, pos=(22,57), size=24, color=(0,0,0)):
+    def __init__(self, score=0, pos=(30,59), size=28, color=(0,255,255)):
         self.score = score
         self.size = size
         self.color = color

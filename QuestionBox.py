@@ -23,7 +23,7 @@ class QuestionBox(pg.sprite.Sprite):
 
         # background image for question box
         self.image = pg.image.load(self.file_path)
-        self.image = pg.transform.scale(self.image, (96, 48))
+        self.image = pg.transform.scale(self.image, (self.text_rect.size[0]+10, 48))
         self.rect = self.image.get_rect()
 
         # blit the question text image onto the background image
@@ -48,7 +48,7 @@ class QuestionBox(pg.sprite.Sprite):
         # change the filename and thus change everything to change the background image of the bottom most question
         self.file_path = os.path.join(self.base_path, 'assets', 'icons', self.filename)
         self.image = pg.image.load(self.file_path)
-        self.image = pg.transform.scale(self.image, (96, 48))
+        self.image = pg.transform.scale(self.image, (self.text_rect.size[0]+10, 48))
         self.rect = self.image.get_rect()
         self.image.blit(self.text_image, (self.rect.size[0]/2 - self.text_rect.size[0]/2, self.rect.size[1]/2 - self.text_rect.size[1]/2))
         
