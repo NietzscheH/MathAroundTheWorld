@@ -2,7 +2,7 @@ import pygame as pg
 import os
 
 class QuestionBox(pg.sprite.Sprite):
-    def __init__(self, xcor, y_speed, filename='moon_1.png', text='Hello', ans='0', text_color=(0,0,0)):
+    def __init__(self, xcor, y_speed, filename='China.png', text='Hello', ans='0', text_color=(0,0,0)):
         pg.sprite.Sprite.__init__(self)
         self.xcor = xcor
         self.ycor = -28
