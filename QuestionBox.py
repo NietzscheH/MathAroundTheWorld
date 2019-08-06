@@ -5,8 +5,8 @@ class QuestionBox(pg.sprite.Sprite):
     def __init__(self, xcor, y_speed, filename='moon_1.png', text='Hello', ans='0', text_color=(0,0,0)):
         pg.sprite.Sprite.__init__(self)
         self.xcor = xcor
-        self.ycor = -24
-        self.height = 24
+        self.ycor = -28
+        self.height = 28
         self.speed = y_speed
         self.txt = text
         self.text_color = text_color

@@ -16,7 +16,7 @@ class Controller:
         pg.init()
         pg.mixer.init()
         self.screen = pg.display.set_mode((1024, 768))
-        pg.display.set_caption('v2.2')
+        pg.display.set_caption('v2.3')
         self.mouse_x, self.mouse_y = None, None
         self.fps = 30
 
@@ -367,7 +367,7 @@ class Controller:
             return: density ('int') represents rate at which Question Boxes
                       are generated
         '''
-        if self.score in (1,): # do a pop-up question and freeze the dropping questions
+        if self.score in (3,20,50): # do a pop-up question and freeze the dropping questions
             self.pop_up = PopUp(self.score)
             self.timer.append(time())
             self.screen.blit(self.pop_up.image, self.pop_up.rect)
@@ -376,7 +376,7 @@ class Controller:
                 self.pop_show = False
             else:
                 pass
-            if time() - self.timer[0] >= 60: # if user does answer the pop-up question in a certain amount of time, they would lose their chance
+            if time() - self.timer[0] >= 90: # if user does answer the pop-up question in a certain amount of time, they would lose their chance
                 self.timer = []
                 self.pop_up = None
                 self.score += 0.01
@@ -435,7 +435,7 @@ class Controller:
             return: none
         '''
         if self.pop_up is not None:
-            if self.pop_up.problems[self.score]['ans'] == ans_submitted:
+            if ans_submitted in self.pop_up.problems[self.score]['ans']:
                 self.sound_effect['right'].play()
                 if self.lives != 3:
                     self.health_bar.update(1)
@@ -449,7 +449,7 @@ class Controller:
                 self.sound_effect['wrong'].play()
         else:
             for sp in self.questions:
-                if sp.answer == ans_submitted:
+                if ans_submitted in sp.answer:
                     self.sound_effect['right'].play()
                     self.score_board.update() # in update(), the score will + 1
                     self.score = int((self.score + 1)//1)
@@ -630,6 +630,8 @@ class Controller:
                 pg.display.update()
 
             # reset everything
+            self.pop_up = None
+            self.timer = []
             self.questions.empty()
             self.ans_typein.result = ''
             self.ans_typein.update() # empty the type in box
