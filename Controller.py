@@ -435,7 +435,7 @@ class Controller:
             return: none
         '''
         if self.pop_up is not None:
-            if ans_submitted in self.pop_up.problems[self.score]['ans']:
+            if ans_submitted in self.pop_up.problems[self.score]['ans'] and ans_submitted != '':
                 self.sound_effect['right'].play()
                 if self.lives != 3:
                     self.health_bar.update(1)
@@ -449,7 +449,7 @@ class Controller:
                 self.sound_effect['wrong'].play()
         else:
             for sp in self.questions:
-                if ans_submitted in sp.answer:
+                if ans_submitted in sp.answer and ans_submitted != '':
                     self.sound_effect['right'].play()
                     self.score_board.update() # in update(), the score will + 1
                     self.score = int((self.score + 1)//1)
