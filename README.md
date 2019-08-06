@@ -67,8 +67,8 @@ This is a math game called 'Math Around the World.' In this game, you will see m
     * matplotlib
         * doc: https://matplotlib.org/
         * description: A library that is primarily used to draw graphs of functions.
-* Decide upon a class interface for the classes in your project.
-    * A simple drawing that shows the class relationships in your code (see the sample Proposal document for an example). ![class diagram](assets/class_diagram.jpg)
+* Class structure
+    ![class diagram](assets/ClassRelationshipsChartProposal.png)
 
 * __List of Classes__
 
