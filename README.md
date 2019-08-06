@@ -24,10 +24,10 @@ This is a math game called 'Math Around the World.' In this game, you will see m
 ## User Interface Design
 * __Start Screen__
     ![Start Screen](assets/screen_shot/start_screen.png)
-    * A start screen with a gif background and three buttons name 'START', 'RULES', and 'CREDITS.'
+    * A start screen with a gif background and three buttons named 'START', 'RULES', and 'CREDITS.'
 * __Rules Screen__
     * A screen with a gif background that shows how to play this game.
-* __Credit Screen__
+* __Credits Screen__
     * A screen with a gif background that shows credits and acknowledgements.
 * __Menu Screen__
     ![Menu Screen](assets/screen_shot/menu_screen.png)
@@ -45,14 +45,14 @@ This is a math game called 'Math Around the World.' In this game, you will see m
         * Game screen of Italy, with a unique background, a scoreboard and health bar in the top left corner, an answer type-in box at the bottom, and questions dropping down in the middle.
     * Popup Question
         ![Popup Question](assets/screen_shot/popup_question.png)
-        * The popup questions that will appear if users reach a certain level of scores.
+        * The popup questions that will appear if the user's score reaches a certain level.
     * Popup Question Graph
         ![Popup Questions Graph](assets/screen_shot/popup_graph.png)
         * The graph of the popup question that will show up if users tap backquote key when they are on a popup question.
 
 * __Result Screen__
     ![Result Screen](assets/screen_shot/result_screen.png)
-    * A screen that shows how many scores the users earned in the last game, with a clickable button that leads users back to start screen.
+    * A screen that shows how many points the user earned in the last game, with a clickable button that leads the user back to the start screen.
 
 ***        
 
@@ -60,15 +60,19 @@ This is a math game called 'Math Around the World.' In this game, you will see m
 * Additional Libraries
     * pygame
         * doc: https://www.pygame.org/docs/
-        * description: A library that is primarily used to create games in python environment.
+        * description: A library that is primarily used to create games in a python environment.
     * numpy
         * doc: https://docs.scipy.org/doc/numpy/
         * description: A library that is primarily used for computing.
     * matplotlib
         * doc: https://matplotlib.org/
         * description: A library that is primarily used to draw graphs of functions.
+    * SymPy
+        * doc: https://www.sympy.org/
+        * description: A library that is primarily used for symbolic mathematics, employing the mpmath library (http://mpmath.org/) for floating point arithmetic.
+
 * Class structure
-    ![class diagram](assets/ClassRelationshipsChartProposal.png)
+    ![class diagram](assets/JOKe Class Relationships Chart.png)
 
 * __List of Classes__
 
@@ -79,11 +83,11 @@ This is a math game called 'Math Around the World.' In this game, you will see m
   * __QuestionGenerator__ - This class works behind the scenes to generate the questions that are displayed in the Question Boxes.
 
 
-  * __PopUpQuestionBox__ - This class produces a Pop-Up Question Box that displays bonus questions accompanied by visualizations.
+  * __PopUpQuestionBox__ - This class displays bonus questions accompanied by visualizations.
 
-  * __ScoreBoard__ - This class displays the user’s current score.
+  * __ScoreBoard__ - The instance of this class displays the user’s current score.
 
-  * __HealthIcon__ - This class creates sprites that represent the number of questions the user can get wrong before the game ends.
+  * __HealthIcon__ - This class creates objects that represent the number of questions the user can get wrong before the game ends.
 
   * __MenuButton__ - The instances of this class denote areas where the user can click the mouse to switch between screens.
 
@@ -95,7 +99,7 @@ This is a math game called 'Math Around the World.' In this game, you will see m
 
 ### Software Lead - Yuqiao Huang
 
-* Modules: Controller, QuestionBox, AnswerTypeing, QuestionGenerator, PopUpQuestionBox, ScoreBoard, HealthIcon, MenuButton
+* Modules: Controller, QuestionBox, AnswerTypein, QuestionGenerator, PopUpQuestionBox, ScoreBoard, HealthIcon, MenuButton
 * Others: ATP, background image for dropping problems
 
 ### Front End Specialist - Jae Kim
