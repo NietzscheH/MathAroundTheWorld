@@ -1,28 +1,19 @@
-from AnswerTypein import AnswerTypein
-from QuestionBox import QuestionBox
-from MenuButton import MenuButton
-from Controller import Controller
-from QuestionGenerator import QuestionGenerator
 import pygame as pg
+from QuestionBox import QuestionBox
+from ScoreBoard import ScoreBoard
 
 def main():
     pg.init()
     print('##### Testing question box generator #####')
     testQB = QuestionBox(100, 1)
     testQB.update()
-    assert testQB.rect.y == -35
+    assert testQB.rect.y == -27
     print('##### Test completed #####')
 
-    print('##### Testing answer typein #####')
-    testAT = AnswerTypein()
-    testAT.update(53)
-    assert testAT.result == '5'
+    print('##### Testing score board #####')
+    testSB = ScoreBoard()
+    testSB.update()
+    assert testSB.score == 1
     print('##### Test completed #####')
-
-    print('##### Testing question generator #####')
-    testQG = QuestionGenerator()
-    exp, ans = testQG.level_1()
-    assert str(eval(exp)) == ans
-    print('##### Test completeted #####')
 
 main()
