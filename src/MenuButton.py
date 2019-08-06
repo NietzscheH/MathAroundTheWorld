@@ -2,6 +2,10 @@ import pygame as pg
 from os import path
 
 class MenuButton:
+    '''
+        The instances of this class denote areas where the user can
+            click to switch between screens
+    '''
     def __init__(self, pos, default_pic, hover_pic):
         self.base_path = path.dirname(__file__)
         self.default_pic_path = path.join(self.base_path, '..', 'assets', 'Buttons', default_pic)

@@ -1,6 +1,10 @@
 import pygame as pg
 
 class AnswerTypein(pg.sprite.Sprite):
+    '''
+        The sprite in this class displays the answer typed
+            by the user
+    '''
     def __init__(self, text_color=(33,206,153), bg_color=(214,213,183,100)):
         pg.sprite.Sprite.__init__(self)
         self.text_color = text_color
@@ -50,7 +54,7 @@ class AnswerTypein(pg.sprite.Sprite):
 
     def submit(self):
         '''
-            Returns the user's answer after the enter key has been pressed
+            Returns the user's answer after the ENTER key has been pressed
             args: none
             return: ('str') the answer entered by the user
         '''

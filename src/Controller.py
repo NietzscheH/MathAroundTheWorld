@@ -11,6 +11,11 @@ from os import path
 from time import time, sleep
 
 class Controller:
+    '''
+        This class mediates between the View and the Models, calling for
+            updates to class state, screen presentation, and special effects
+            in response to events and user input
+    '''
     def __init__(self):
         # initialize a screen
         pg.init()
@@ -343,7 +348,9 @@ class Controller:
 
     def drawRules(self):
         '''
-            Ruels
+            Draws images for Rules Screen
+            args: none
+            return: none
         '''
         self.screen.blit(self.bg_rules_and_credit[self.bg_rules_and_credit_index//(self.fps//6)], (0,0)) # draw the background gif
         self.bg_rules_and_credit_index += 1 if self.bg_rules_and_credit_index < self.fps * 39//6 - 1 else -(self.fps * 39//6 - 1)
@@ -351,7 +358,9 @@ class Controller:
 
     def drawCredit(self):
         '''
-            show credit
+            Draws images for Credits Screen
+            args: none
+            return: none
         '''
         self.screen.blit(self.bg_rules_and_credit[self.bg_rules_and_credit_index//(self.fps//6)], (0,0)) # draw the background gif
         self.bg_rules_and_credit_index += 1 if self.bg_rules_and_credit_index < self.fps * 39//6 - 1 else -(self.fps * 39//6 - 1)
@@ -367,7 +376,7 @@ class Controller:
             return: density ('int') represents rate at which Question Boxes
                       are generated
         '''
-        if self.score in (3,20,50): # do a pop-up question and freeze the dropping questions
+        if self.score in (3,10,20,35,50): # do a pop-up question and freeze the dropping questions
             self.pop_up = PopUp(self.score)
             self.timer.append(time())
             self.screen.blit(self.pop_up.image, self.pop_up.rect)

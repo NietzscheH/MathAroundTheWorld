@@ -2,6 +2,10 @@ import pygame as pg
 import os
 
 class HealthIcon:
+    '''
+        This class creates objects that represent the number of questions
+            the user can get wrong before the game ends
+    '''
     def __init__(self, lives=3):
         self.health = lives
 
@@ -31,7 +35,14 @@ class HealthIcon:
         self.image = pg.Surface((96, 32), pg.SRCALPHA, 32).convert_alpha() # this step resets the image, or it will only draw upon the original image
     
     def byCountry(self, country):
+        '''
+            Sets the Health Icon image according to the country
+            args: country ('str') the country chosen for the game screen
+            return: none
+        '''
         self.icon = self.dict[country]
         for i in range(self.health):
             self.image.blit(self.icon, (i*32,0))
         return self.image
+
+

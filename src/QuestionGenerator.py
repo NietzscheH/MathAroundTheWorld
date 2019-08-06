@@ -4,7 +4,12 @@ import decimal
 from decimal import Decimal as D
 
 class QuestionGenerator:
+    '''
+        This class generates the questions that are displayed in the
+            Question Boxes
+    '''
     def __init__(self):
+        # Dictionary of operators
         self.dict = {
             1: '+',
             2: '-',
@@ -12,6 +17,8 @@ class QuestionGenerator:
             4: '/',
             5: '**'
         }
+
+        # References for operations
         self.easy_divisions = [1, 2, 4, 5, 8, 9, 10, 20, 25, 40, 50, 80, -1, -2, -4, -5, -8, -9, -10, -20, -25, -40, -50, -80]
         self.easy_exponential = [0, 1, 2, 3, 4, 6, 7, 8, 9, 10]
         self.trigonometry = {
@@ -24,9 +31,11 @@ class QuestionGenerator:
 
     def level_1(self):
         '''
-            Uses random processes to produce questions for Level 1 (basic math operations between two numbers ranging from 0 to 9)
+            Uses random processes to produce questions for Level 1
+                (Basic math operations between two numbers ranging 
+                from 0 to 9)
             args: none
-            return: (exp, ans) ('tuple') two strings: the first contains
+            return: ('tuple') two strings: the first contains
                     the question, the second contains the answer
         '''
         # Randomly selects two numbers and an operator
@@ -51,7 +60,12 @@ class QuestionGenerator:
 
     def level_2(self):
         '''
-            basic math operations between two numbers ranging from 0 to 99
+            Uses random processes to produce questions for Level 2
+                (Basic math operations between two numbers ranging
+                from 0 to 99)
+            args: none
+            return: ('tuple') two strings: the first contains
+                    the question, the second contains the answer
         '''
         # Randomly selects two numbers and an operator
         exp = '{num1}{operation}{num2}'.format(num1=randint(0, 99), operation=self.dict[randint(1, 4)], num2=randint(0, 99))
@@ -75,7 +89,13 @@ class QuestionGenerator:
 
     def level_3(self):
         '''
-            Math operations between 3 numbers, in which may include some basic trigonometry calculations. Range of numbers are narrowed in order to keep the problem not too difficult
+            Uses random processes to produce questions for Level 3
+                (Math operations between 3 numbers, which may include 
+                some basic trigonometry calculations. Range of numbers 
+                are narrowed in order to keep the problem not too difficult)
+            args: none
+            return: ('tuple') two strings: the first contains
+                    the question, the second contains the answer
         '''
         ans = 120001
         while ans > 120000 or ans < -120000: # upper and lower limit of result
@@ -121,7 +141,12 @@ class QuestionGenerator:
 
     def level_4(self):
         '''
-            Similar to level_3 but with a wider number range and more mathematical operations.
+            Uses random processes to produce questions for Level 4
+                (Similar to level_3 but with a wider number range and 
+                more mathematical operations)
+            args: none
+            return: ('tuple') two strings: the first contains
+                    the question, the second contains the answer
         '''
         ans = 200001
         while ans > 200000 or ans < -200000: # upper and lower limit of result
@@ -171,7 +196,12 @@ class QuestionGenerator:
 
     def level_5(self):
         '''
-            Do not bother reading codes in this method. Questions produced here are probably for computers, not humans.
+            Uses random processes to produce questions for Level 5
+                (Do not bother reading codes in this method. Questions 
+                produced here are probably for computers, not humans.)
+            args: none
+            return: ('tuple') two strings: the first contains
+                    the question, the second contains the answer
         '''
         flag = True
         while flag:
@@ -222,7 +252,11 @@ class QuestionGenerator:
 
     def level_6(self):
         '''
-            You are either too lucky or an extremely intelligent math genius if you are solving questions produced here :)
+            Uses random processes to produce questions for Level 6;
+                you are either too lucky or an extremely intelligent 
+                math genius if you are solving questions produced here :)
+            return: ('tuple') two strings: the first contains
+                    the question, the second contains the answer
         '''
         exp = str(randint(-500, 500))
         temp = exp # use an additional variable 'temp' in order to add 
@@ -266,15 +300,18 @@ class QuestionGenerator:
         return temp, str(ans)
 
 
-# uncomment codes below and run this file to test QuestionGenerator
-'''
-test = QuestionGenerator()
-while True:
-    print(test.level_1(),1)
-    print(test.level_2(),2)
-    print(test.level_3(),3)
-    print(test.level_4(),4)
-    print(test.level_5(),5)
-    #print(test.level_6(),6) # You can try this one but it's not necessary. My conputer crushed here :) - Yuqiao
-    #time.sleep(0.01)
-'''
+def test():
+
+    test = QuestionGenerator()
+    while True:
+        print(test.level_1(),1)
+        print(test.level_2(),2)
+        print(test.level_3(),3)
+        print(test.level_4(),4)
+        print(test.level_5(),5)
+        #print(test.level_6(),6) # You can try this one but it's not necessary. My conputer crushed here :) - Yuqiao
+        #time.sleep(0.01)
+
+if __name__ == '__main__':
+    test()
+
