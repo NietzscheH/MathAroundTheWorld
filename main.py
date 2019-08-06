@@ -1,4 +1,4 @@
-from Controller import Controller
+from src.Controller import Controller
 import pygame
 
 def main():

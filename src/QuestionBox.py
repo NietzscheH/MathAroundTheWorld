@@ -14,7 +14,7 @@ class QuestionBox(pg.sprite.Sprite):
 
         self.filename = filename
         self.base_path = os.path.dirname(__file__)
-        self.file_path = os.path.join(self.base_path, 'assets', 'icons', self.filename)
+        self.file_path = os.path.join(self.base_path, '..', 'assets', 'icons', self.filename)
 
         # first create an image with the message
         self.f = pg.font.SysFont('arial', self.height)
@@ -46,7 +46,7 @@ class QuestionBox(pg.sprite.Sprite):
             return: none
         '''
         # change the filename and thus change everything to change the background image of the bottom most question
-        self.file_path = os.path.join(self.base_path, 'assets', 'icons', self.filename)
+        self.file_path = os.path.join(self.base_path, '..', 'assets', 'icons', self.filename)
         self.image = pg.image.load(self.file_path)
         self.image = pg.transform.scale(self.image, (self.text_rect.size[0]+10, 48))
         self.rect = self.image.get_rect()

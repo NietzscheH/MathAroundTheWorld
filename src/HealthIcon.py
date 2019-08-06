@@ -8,9 +8,9 @@ class HealthIcon:
         # get and rescale the image
         base_path = os.path.dirname(__file__)
         self.dict = {
-            'China': pg.transform.scale(pg.image.load(os.path.join(base_path, 'assets', 'health_icons', 'china_health.png')), (32, 32)),
-            'Egypt': pg.transform.scale(pg.image.load(os.path.join(base_path, 'assets', 'health_icons', 'egypt_health.png')), (32, 32)),
-            'Italy': pg.transform.scale(pg.image.load(os.path.join(base_path, 'assets', 'health_icons', 'italy_health.png')), (32, 32))
+            'China': pg.transform.scale(pg.image.load(os.path.join(base_path, '..', 'assets', 'health_icons', 'china_health.png')), (32, 32)),
+            'Egypt': pg.transform.scale(pg.image.load(os.path.join(base_path, '..', 'assets', 'health_icons', 'egypt_health.png')), (32, 32)),
+            'Italy': pg.transform.scale(pg.image.load(os.path.join(base_path, '..', 'assets', 'health_icons', 'italy_health.png')), (32, 32))
         }
 
         self.image = pg.Surface((96, 32), pg.SRCALPHA, 32).convert_alpha()

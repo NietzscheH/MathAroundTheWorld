@@ -1,11 +1,11 @@
 import pygame as pg
-from QuestionBox import QuestionBox as QB
-from PopUpQuestionBox import PopUpQuestionBox as PopUp
-from QuestionGenerator import QuestionGenerator as QG
-from MenuButton import MenuButton as MB
-from AnswerTypein import AnswerTypein
-from ScoreBoard import ScoreBoard as SB
-from HealthIcon import HealthIcon as HI
+from src.QuestionBox import QuestionBox as QB
+from src.PopUpQuestionBox import PopUpQuestionBox as PopUp
+from src.QuestionGenerator import QuestionGenerator as QG
+from src.MenuButton import MenuButton as MB
+from src.AnswerTypein import AnswerTypein
+from src.ScoreBoard import ScoreBoard as SB
+from src.HealthIcon import HealthIcon as HI
 import random
 from os import path
 from time import time, sleep
@@ -52,26 +52,26 @@ class Controller:
         # general sound effects
         base_path = path.dirname(__file__)
         self.sound_effect = {
-            'wrong': pg.mixer.Sound(path.join(base_path, 'assets', 'sound', 'sound_effects', 'buzzer.wav')),
-            'right': pg.mixer.Sound(path.join(base_path, 'assets', 'sound', 'sound_effects', 'chime.wav')),
-            'hit': pg.mixer.Sound(path.join(base_path, 'assets', 'sound', 'sound_effects', 'clunk.wav'))
+            'wrong': pg.mixer.Sound(path.join(base_path, '..', 'assets', 'sound', 'sound_effects', 'buzzer.wav')),
+            'right': pg.mixer.Sound(path.join(base_path, '..', 'assets', 'sound', 'sound_effects', 'chime.wav')),
+            'hit': pg.mixer.Sound(path.join(base_path, '..', 'assets', 'sound', 'sound_effects', 'clunk.wav'))
         }
         for i in self.sound_effect.keys():
             self.sound_effect[i].set_volume(0.08)
 
         # background image
         self.bg_start_screen_index = 0
-        self.bg_start_screen = [pg.image.load(path.join(base_path, 'assets', 'Background', 'earth_start_screen', 'start_screen{}.png'.format(x))) for x in range(1,40)]
+        self.bg_start_screen = [pg.image.load(path.join(base_path, '..', 'assets', 'Background', 'earth_start_screen', 'start_screen{}.png'.format(x))) for x in range(1,40)]
 
-        self.bg_menu = pg.image.load(path.join(base_path, 'assets', 'Background', 'country_selection_background.jpg'))
+        self.bg_menu = pg.image.load(path.join(base_path, '..', 'assets', 'Background', 'country_selection_background.jpg'))
 
         self.bg_rules_and_credit_index = 0
-        self.bg_rules_and_credit = [pg.image.load(path.join(base_path, 'assets', 'Background', 'rules_and_credit_bg', 'rules_and_credit_bg{}.png'.format(x))) for x in range(1,40)]
+        self.bg_rules_and_credit = [pg.image.load(path.join(base_path, '..', 'assets', 'Background', 'rules_and_credit_bg', 'rules_and_credit_bg{}.png'.format(x))) for x in range(1,40)]
 
         self.bg_by_country = {
-            'China': pg.image.load(path.join(base_path, 'assets', 'Background', 'background_china.png')),
-            'Egypt': pg.image.load(path.join(base_path, 'assets', 'Background', 'background_egypt.png')),
-            'Italy': pg.image.load(path.join(base_path, 'assets', 'Background', 'background_italy.png'))
+            'China': pg.image.load(path.join(base_path, '..', 'assets', 'Background', 'background_china.png')),
+            'Egypt': pg.image.load(path.join(base_path, '..', 'assets', 'Background', 'background_egypt.png')),
+            'Italy': pg.image.load(path.join(base_path, '..', 'assets', 'Background', 'background_italy.png'))
         }
 
         self.icons_by_country = {
@@ -82,15 +82,15 @@ class Controller:
 
         # background music
         self.volume = 0
-        self.bgm_start = pg.mixer.Sound(path.join(base_path, 'assets', 'sound', 'music', 'MenuScreens.wav'))
+        self.bgm_start = pg.mixer.Sound(path.join(base_path, '..', 'assets', 'sound', 'music', 'MenuScreens.wav'))
         self.bgm_start.set_volume(0.15)
-        self.bgm_credit = pg.mixer.Sound(path.join(base_path, 'assets', 'sound', 'music', 'CreditsScreen.wav'))
+        self.bgm_credit = pg.mixer.Sound(path.join(base_path, '..', 'assets', 'sound', 'music', 'CreditsScreen.wav'))
         self.bgm_credit.set_volume(0.1)
 
         self.bgm_by_country = {
-            'China': [pg.mixer.Sound(path.join(base_path, 'assets', 'sound', 'music', 'China{}.wav'.format(x))) for x in range(1,4)],
-            'Egypt': [pg.mixer.Sound(path.join(base_path, 'assets', 'sound', 'music', 'Egypt{}.wav'.format(x))) for x in range(1,4)],
-            'Italy': [pg.mixer.Sound(path.join(base_path, 'assets', 'sound', 'music', 'Italy{}.wav'.format(x))) for x in range(1,4)]
+            'China': [pg.mixer.Sound(path.join(base_path, '..', 'assets', 'sound', 'music', 'China{}.wav'.format(x))) for x in range(1,4)],
+            'Egypt': [pg.mixer.Sound(path.join(base_path, '..', 'assets', 'sound', 'music', 'Egypt{}.wav'.format(x))) for x in range(1,4)],
+            'Italy': [pg.mixer.Sound(path.join(base_path, '..', 'assets', 'sound', 'music', 'Italy{}.wav'.format(x))) for x in range(1,4)]
         }
         for i in self.bgm_by_country.keys():
             for g in self.bgm_by_country[i]:

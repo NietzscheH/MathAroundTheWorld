@@ -4,8 +4,8 @@ from os import path
 class MenuButton:
     def __init__(self, pos, default_pic, hover_pic):
         self.base_path = path.dirname(__file__)
-        self.default_pic_path = path.join(self.base_path, 'assets', 'Buttons', default_pic)
-        self.hover_pic_path = path.join(self.base_path, 'assets', 'Buttons', hover_pic)
+        self.default_pic_path = path.join(self.base_path, '..', 'assets', 'Buttons', default_pic)
+        self.hover_pic_path = path.join(self.base_path, '..', 'assets', 'Buttons', hover_pic)
 
         self.pos = pos
         self.image = pg.image.load(self.default_pic_path)
