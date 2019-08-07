@@ -26,8 +26,10 @@ This is a math game called 'Math Around the World.' In this game, you will see m
     ![Start Screen](assets/screen_shot/start_screen.png)
     * A start screen with a gif background and three buttons named 'START', 'RULES', and 'CREDITS.'
 * __Rules Screen__
+    ![Rules Screen](assets/screen_shot/rules_screen.png)
     * A screen with a gif background that shows how to play this game.
 * __Credits Screen__
+    ![Credits Screen](assets/screen_shot/credits_screen.png)
     * A screen with a gif background that shows credits and acknowledgements.
 * __Menu Screen__
     ![Menu Screen](assets/screen_shot/menu_screen.png)
