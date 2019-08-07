@@ -21,7 +21,7 @@ class Controller:
         pg.init()
         pg.mixer.init()
         self.screen = pg.display.set_mode((1024, 768))
-        pg.display.set_caption('v2.3')
+        pg.display.set_caption('Math Around the World')
         self.mouse_x, self.mouse_y = None, None
         self.fps = 30
 
@@ -78,6 +78,11 @@ class Controller:
             'Egypt': pg.image.load(path.join(base_path, '..', 'assets', 'Background', 'background_egypt.png')),
             'Italy': pg.image.load(path.join(base_path, '..', 'assets', 'Background', 'background_italy.png'))
         }
+
+        self.rules_text = pg.image.load(path.join(base_path, '..', 'assets', 'text', 'rules_edited.png'))
+        self.rules_text = pg.transform.scale(self.rules_text, (909,705))
+        self.credits_text = pg.image.load(path.join(base_path, '..', 'assets', 'text', 'credits_edited.png'))
+        self.credits_text = pg.transform.scale(self.credits_text, (909,705))
 
         self.icons_by_country = {
             'China': ['China.png', 'China_bot.png'],
@@ -354,7 +359,8 @@ class Controller:
         '''
         self.screen.blit(self.bg_rules_and_credit[self.bg_rules_and_credit_index//(self.fps//6)], (0,0)) # draw the background gif
         self.bg_rules_and_credit_index += 1 if self.bg_rules_and_credit_index < self.fps * 39//6 - 1 else -(self.fps * 39//6 - 1)
-        self.screen.blit(self.rules_button.image, (50,50))
+        #self.screen.blit(self.rules_button.image, (50,50))
+        self.screen.blit(self.rules_text, (50, 50))
 
     def drawCredit(self):
         '''
@@ -364,7 +370,8 @@ class Controller:
         '''
         self.screen.blit(self.bg_rules_and_credit[self.bg_rules_and_credit_index//(self.fps//6)], (0,0)) # draw the background gif
         self.bg_rules_and_credit_index += 1 if self.bg_rules_and_credit_index < self.fps * 39//6 - 1 else -(self.fps * 39//6 - 1)
-        self.screen.blit(self.credit_button.image, (50,50))
+        #self.screen.blit(self.credit_button.image, (50,50))
+        self.screen.blit(self.credits_text, (50, 50))
 
     def drawGame(self, density, country):
         '''
