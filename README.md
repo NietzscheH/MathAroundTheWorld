@@ -72,7 +72,7 @@ This is a math game called 'Math Around the World.' In this game, you will see m
         * description: A library that is primarily used for symbolic mathematics, employing the mpmath library (http://mpmath.org/) for floating point arithmetic.
 
 * Class structure
-    ![class diagram](assets/JOKe Class Relationships Chart.png)
+    ![class diagram](assets/JOKe_Class_Relationships_Chart.png)
 
 * __List of Classes__
 
